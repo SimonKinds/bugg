@@ -1,10 +1,10 @@
-import React from 'react';
-import {render, cleanup} from 'react-testing-library'
+import React from "react";
+import { render, cleanup } from "react-testing-library";
 
-import App from './index';
+import App from "./index";
 
 afterEach(cleanup);
 
-it('Can render without crashing', () => {
-    render(<App />);
+it("Can render without crashing", () => {
+  render(<App />);
 });

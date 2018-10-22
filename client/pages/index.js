@@ -1,1 +1,1 @@
-export default () => 'Next.js setup';
+export default () => "Next.js setup";
