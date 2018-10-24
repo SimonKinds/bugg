@@ -13,6 +13,17 @@
     "test": "NODE_ENV=test jest --watch",
     "format": "prettier --write 'pages/**/*.js' 'components/**/*.js' '!(node_modules|.next)/**/*.js'"
   },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "dependencies": {
     "next": "^7.0.2",
     "react": "^16.5.2",
@@ -21,6 +32,7 @@
   "devDependencies": {
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
+    "husky": "^1.1.2",
     "jest": "^23.6.0",
     "prettier": "1.14.3",
     "react-testing-library": "^5.2.0"
