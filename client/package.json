@@ -10,7 +10,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "test": "NODE_ENV=test jest --watch",
+    "test": "NODE_ENV=test jest",
+    "test:watch": "NODE_ENV=test jest --watch",
     "format": "prettier --write 'pages/**/*.js' 'components/**/*.js' '!(node_modules|.next)/**/*.js'"
   },
   "lint-staged": {
@@ -21,7 +22,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npm test && lint-staged"
     }
   },
   "dependencies": {
