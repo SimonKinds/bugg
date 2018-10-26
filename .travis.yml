@@ -8,12 +8,14 @@ os: linux
 matrix:
   include:
     - name: test
+      before_install: cd client && yarn
+      before_script: cd client
       script:
-        - cd client && npm run test
+        - yarn test
     - name: lint
+      before_install: cd client && yarn
+      before_script: cd client
       script:
-        - cd client && npm run lint
+        - yarn lint
 
-cache:
-  directories:
-    - "client/node_modules"
+cache: yarn
