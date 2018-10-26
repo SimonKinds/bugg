@@ -9,12 +9,10 @@ matrix:
   include:
     - name: test
       before_install: cd client && yarn
-      before_script: cd client
       script:
         - yarn test
     - name: lint
       before_install: cd client && yarn
-      before_script: cd client
       script:
         - yarn lint
 
