@@ -34,15 +34,18 @@
     "react-dom": "^16.5.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "9.x",
     "babel-jest": "^23.6.0",
+    "babel-preset-flow": "^6.23.0",
     "eslint": "5.x",
     "eslint-config-react-app": "^3.0.4",
     "eslint-plugin-flowtype": "2.x",
     "eslint-plugin-import": "2.x",
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
+    "flow-bin": "^0.84.0",
     "husky": "^1.1.2",
     "jest": "^23.6.0",
     "lint-staged": "^7.3.0",
