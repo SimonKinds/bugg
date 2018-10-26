@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  # Latest stable node release
+  - "node"
+
+os: linux
+
+matrix:
+  include:
+    - name: test
+      script:
+        - cd client && npm run test
+    - name: lint
+      script:
+        - cd client && npm run lint
+
+cache:
+  directories:
+    - "client/node_modules"
