@@ -12,10 +12,13 @@
     "start": "next start",
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test jest --watch",
-    "format": "prettier --write 'pages/**/*.js' 'components/**/*.js' '!(node_modules|.next)/**/*.js'"
+    "format": "prettier --write 'pages/**/*.js' '!(node_modules|.next)/**/*.js'",
+    "lint": "eslint 'pages/**/*.js'",
+    "lint:fix": "eslint --fix 'pages/**/*.js'"
   },
   "lint-staged": {
     "*.js": [
+      "eslint --fix",
       "prettier --write",
       "git add"
     ]
@@ -32,9 +35,17 @@
   },
   "devDependencies": {
     "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "9.x",
     "babel-jest": "^23.6.0",
+    "eslint": "5.x",
+    "eslint-config-react-app": "^3.0.4",
+    "eslint-plugin-flowtype": "2.x",
+    "eslint-plugin-import": "2.x",
+    "eslint-plugin-jsx-a11y": "6.x",
+    "eslint-plugin-react": "7.x",
     "husky": "^1.1.2",
     "jest": "^23.6.0",
+    "lint-staged": "^7.3.0",
     "prettier": "1.14.3",
     "react-testing-library": "^5.2.0"
   }
