@@ -1,0 +1,115 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  margin: 0;
+  background-color: #fafafa;
+}
+
+.header {
+  height: 5rem;
+  border-bottom: 1px solid #c4c4c4;
+  background-color: #fefefe;
+  display: flex;
+  align-content: center;
+}
+
+.container {
+  padding: 1rem;
+  max-width: 768px;
+  margin: auto;
+}
+
+.site-name {
+  font-size: 2.4rem;
+  margin: auto 15px;
+}
+
+.note-taking-information {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.tournament-name {
+  margin: 0;
+  font-size: 2.4rem;
+  font-weight: 700;
+  font-variant: small-caps;
+}
+
+.round-information {
+  display: flex;
+}
+
+.round-name {
+  font-variant: small-caps;
+  font-size: 2rem;
+  margin: 0 2rem 0 0;
+}
+
+.group-name {
+  font-variant: small-caps;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.judge-information {
+  display: flex;
+  flex-direction: column;
+}
+
+.judge-name {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.judge-type-name {
+  font-size: 2rem;
+  font-weight: 200;
+  margin: 0;
+}
+
+.couple-picker-container {
+  margin: 4rem 0;
+}
+.couple-picker-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.couple-picker {
+  height: 5rem;
+  width: 12rem;
+  margin: 0;
+}
+
+.couple-picker--visible {
+  outline: none;
+
+  display: inline-block;
+  border: 0.3rem solid #c4c4c4;
+  border-radius: 0.8rem;
+
+  text-decoration: none;
+  background: #fafafa;
+  font-family: sans-serif;
+  font-size: 2rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.couple-picker--visible:hover,
+.couple-picker--visible:focus {
+  border: 0.3rem solid #2d29e2;
+}
+
+.couple-picker--visible:focus {
+  outline: 1px solid #2D29E2;
+  outline-offset: -4px;
+}
+
+.couple-picker--visible:active {
+  transform: scale(0.99);
+}
