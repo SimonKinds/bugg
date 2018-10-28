@@ -70,155 +70,61 @@ function IndexPage() {
           </div>
           <div>
             <form>
-              <div>
-                <h2>48</h2>
-                <fieldset>
-                  <legend>style</legend>
-                  <label htmlFor="style-0">
-                    0<input name="style-48" id="style-0" type="radio" />
-                  </label>
-                  <label htmlFor="style-1">
-                    1<input name="style-48" id="style-1" type="radio" />
-                  </label>
-                  <label htmlFor="style-2">
-                    2<input name="style-48" id="style-2" type="radio" />
-                  </label>
-                  <label htmlFor="style-3">
-                    3<input name="style-48" id="style-3" type="radio" />
-                  </label>
-                  <label htmlFor="style-4">
-                    4<input name="style-48" id="style-4" type="radio" />
-                  </label>
-                </fieldset>
-                <fieldset>
-                  <legend>sexiness</legend>
-                  <label htmlFor="sexiness-0">
-                    0<input name="sexiness-48" id="sexiness-0" type="radio" />
-                  </label>
-                  <label htmlFor="sexiness-1">
-                    1<input name="sexiness-48" id="sexiness-1" type="radio" />
-                  </label>
-                  <label htmlFor="sexiness-2">
-                    2<input name="sexiness-48" id="sexiness-2" type="radio" />
-                  </label>
-                  <label htmlFor="sexiness-3">
-                    3<input name="sexiness-48" id="sexiness-3" type="radio" />
-                  </label>
-                  <label htmlFor="sexiness-4">
-                    4<input name="sexiness-48" id="sexiness-4" type="radio" />
-                  </label>
-                </fieldset>
-                <fieldset>
-                  <legend>looks</legend>
-                  <label htmlFor="looks-0">
-                    0<input name="looks-48" id="looks-0" type="radio" />
-                  </label>
-                  <label htmlFor="looks-1">
-                    1<input name="looks-48" id="looks-1" type="radio" />
-                  </label>
-                  <label htmlFor="looks-2">
-                    2<input name="looks-48" id="looks-2" type="radio" />
-                  </label>
-                  <label htmlFor="looks-3">
-                    3<input name="looks-48" id="looks-3" type="radio" />
-                  </label>
-                  <label htmlFor="looks-4">
-                    4<input name="looks-48" id="looks-4" type="radio" />
-                  </label>
-                </fieldset>
-                <fieldset>
-                  <legend>smell</legend>
-                  <label htmlFor="smell-0">
-                    0<input name="smell-48" id="smell-0" type="radio" />
-                  </label>
-                  <label htmlFor="smell-1">
-                    1<input name="smell-48" id="smell-1" type="radio" />
-                  </label>
-                  <label htmlFor="smell-2">
-                    2<input name="smell-48" id="smell-2" type="radio" />
-                  </label>
-                  <label htmlFor="smell-3">
-                    3<input name="smell-48" id="smell-3" type="radio" />
-                  </label>
-                  <label htmlFor="smell-4">
-                    4<input name="smell-48" id="smell-4" type="radio" />
-                  </label>
-                </fieldset>
-              </div>
-              <div>
-                <h2>33</h2>
-                <fieldset>
-                  <legend>style</legend>
-                  <label htmlFor="style-0">
-                    0<input name="style-33" id="style-0" type="radio" />
-                  </label>
-                  <label htmlFor="style-1">
-                    1<input name="style-33" id="style-1" type="radio" />
-                  </label>
-                  <label htmlFor="style-2">
-                    2<input name="style-33" id="style-2" type="radio" />
-                  </label>
-                  <label htmlFor="style-3">
-                    3<input name="style-33" id="style-3" type="radio" />
-                  </label>
-                  <label htmlFor="style-4">
-                    4<input name="style-33" id="style-4" type="radio" />
-                  </label>
-                </fieldset>
-                <fieldset>
-                  <legend>sexiness</legend>
-                  <label htmlFor="sexiness-0">
-                    0<input name="sexiness-33" id="sexiness-0" type="radio" />
-                  </label>
-                  <label htmlFor="sexiness-1">
-                    1<input name="sexiness-33" id="sexiness-1" type="radio" />
-                  </label>
-                  <label htmlFor="sexiness-2">
-                    2<input name="sexiness-33" id="sexiness-2" type="radio" />
-                  </label>
-                  <label htmlFor="sexiness-3">
-                    3<input name="sexiness-33" id="sexiness-3" type="radio" />
-                  </label>
-                  <label htmlFor="sexiness-4">
-                    4<input name="sexiness-33" id="sexiness-4" type="radio" />
-                  </label>
-                </fieldset>
-                <fieldset>
-                  <legend>looks</legend>
-                  <label htmlFor="looks-0">
-                    0<input name="looks-33" id="looks-0" type="radio" />
-                  </label>
-                  <label htmlFor="looks-1">
-                    1<input name="looks-33" id="looks-1" type="radio" />
-                  </label>
-                  <label htmlFor="looks-2">
-                    2<input name="looks-33" id="looks-2" type="radio" />
-                  </label>
-                  <label htmlFor="looks-3">
-                    3<input name="looks-33" id="looks-3" type="radio" />
-                  </label>
-                  <label htmlFor="looks-4">
-                    4<input name="looks-33" id="looks-4" type="radio" />
-                  </label>
-                </fieldset>
-                <fieldset>
-                  <legend>smell</legend>
-                  <label htmlFor="smell-0">
-                    0<input name="smell-33" id="smell-0" type="radio" />
-                  </label>
-                  <label htmlFor="smell-1">
-                    1<input name="smell-33" id="smell-1" type="radio" />
-                  </label>
-                  <label htmlFor="smell-2">
-                    2<input name="smell-33" id="smell-2" type="radio" />
-                  </label>
-                  <label htmlFor="smell-3">
-                    3<input name="smell-33" id="smell-3" type="radio" />
-                  </label>
-                  <label htmlFor="smell-4">
-                    4<input name="smell-33" id="smell-4" type="radio" />
-                  </label>
-                </fieldset>
+              <div className="note-taking-area">
+                <div className="note-taking-column">
+                  <h2 className="note-taking-column-header">48</h2>
+                  <NoteTakingColumnItem
+                    participantId="48"
+                    criterionName="style"
+                    color="blue"
+                    values={[0, 1, 2, 3, 4]}
+                  />
+                  <NoteTakingColumnItem
+                    participantId="48"
+                    criterionName="sexiness"
+                    color="red"
+                    values={[0, 1, 2, 3, 4]}
+                  />
+                  <NoteTakingColumnItem
+                    participantId="48"
+                    criterionName="looks"
+                    color="green"
+                    values={[0, 1, 2, 3, 4]}
+                  />
+                  <NoteTakingColumnItem
+                    participantId="48"
+                    criterionName="smell"
+                    color="purple"
+                    values={[0, 1, 2, 3, 4]}
+                  />
+                </div>
+                <div className="note-taking-column">
+                  <h2 className="note-taking-column-header">33</h2>
+                  <NoteTakingColumnItem
+                    participantId="33"
+                    criterionName="style"
+                    color="blue"
+                    values={[0, 1, 2, 3, 4]}
+                  />
+                  <NoteTakingColumnItem
+                    participantId="33"
+                    criterionName="sexiness"
+                    color="red"
+                    values={[0, 1, 2, 3, 4]}
+                  />
+                  <NoteTakingColumnItem
+                    participantId="33"
+                    criterionName="looks"
+                    color="green"
+                    values={[0, 1, 2, 3, 4]}
+                  />
+                  <NoteTakingColumnItem
+                    participantId="33"
+                    criterionName="smell"
+                    color="purple"
+                    values={[0, 1, 2, 3, 4]}
+                  />
+                </div>
               </div>
               <button type="submit">Submit</button>
             </form>
@@ -226,6 +132,64 @@ function IndexPage() {
         </main>
       </div>
     </>
+  );
+}
+
+type NoteTakingColumnProps = {
+  participantId: string,
+  criterionName: string,
+  values: Array<number>,
+  color: "blue" | "red" | "green" | "purple"
+};
+function NoteTakingColumnItem({
+  participantId,
+  criterionName,
+  values,
+  color
+}: NoteTakingColumnProps) {
+  return (
+    <fieldset
+      className={`note-taking-column-item note-taking-column-item--${color}`}
+    >
+      <h3 className="note-taking-column-item-header">{criterionName}</h3>
+      <div className="note-taking-column-item-options">
+        {values.map(value => (
+          <NoteTakingColumnItemOption
+            key={`${participantId}-${criterionName}-${value}`}
+            participantId={participantId}
+            criterionName={criterionName}
+            value={value}
+          />
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+type NoteTakingColumnItemOptionProps = {
+  participantId: string,
+  criterionName: string,
+  value: number
+};
+function NoteTakingColumnItemOption({
+  participantId,
+  criterionName,
+  value
+}: NoteTakingColumnItemOptionProps) {
+  return (
+    <label
+      htmlFor={`${participantId}-${criterionName}-${value}`}
+      className="note-taking-item-option"
+    >
+      <input
+        name={`${participantId}-${criterionName}`}
+        id={`${participantId}-${criterionName}-${value}`}
+        type="radio"
+        className="note-taking-item-option-value"
+        value={value}
+      />
+      {value}
+    </label>
   );
 }
 
