@@ -33,43 +33,18 @@ function IndexPage() {
         <main>
           <div className="couple-picker-container">
             <div className="couple-picker-row">
-              <button
-                type="button"
-                className="couple-picker couple-picker--visible"
-              >
-                48 - 33
-              </button>
-              <span className="couple-picker" />
-              <button
-                type="button"
-                className="couple-picker couple-picker--visible"
-              >
-                48 - 33
-              </button>
-              <span className="couple-picker" />
-              <button
-                type="button"
-                className="couple-picker couple-picker--visible"
-              >
-                48 - 33
-              </button>
+              <CouplePickerButton coupleIdForHumans={"48 - 33"} />
+              <CouplePickerButton empty />
+              <CouplePickerButton coupleIdForHumans={"48 - 33"} />
+              <CouplePickerButton empty />
+              <CouplePickerButton coupleIdForHumans={"48 - 33"} />
             </div>
             <div className="couple-picker-row">
-              <span className="couple-picker" />
-              <button
-                type="button"
-                className="couple-picker couple-picker--visible"
-              >
-                48 - 33
-              </button>
-              <span className="couple-picker" />
-              <button
-                type="button"
-                className="couple-picker couple-picker--visible"
-              >
-                48 - 33
-              </button>
-              <span className="couple-picker" />
+              <CouplePickerButton empty />
+              <CouplePickerButton coupleIdForHumans={"48 - 33"} />
+              <CouplePickerButton empty />
+              <CouplePickerButton coupleIdForHumans={"48 - 33"} />
+              <CouplePickerButton empty />
             </div>
           </div>
           <div>
@@ -138,6 +113,25 @@ function IndexPage() {
         </main>
       </div>
     </>
+  );
+}
+
+type CouplePickerButtonProps = {
+  coupleIdForHumans?: string,
+  empty?: boolean
+};
+function CouplePickerButton({
+  coupleIdForHumans,
+  empty
+}: CouplePickerButtonProps) {
+  if (empty) {
+    return <span className="couple-picker" />;
+  }
+
+  return (
+    <button type="button" className="couple-picker couple-picker--visible">
+      {coupleIdForHumans}
+    </button>
   );
 }
 
