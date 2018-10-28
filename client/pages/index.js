@@ -126,7 +126,9 @@ function IndexPage() {
                   />
                 </div>
               </div>
-              <button type="submit">Submit</button>
+              <button type="submit" className="note-taking-submit-button">
+                Submit
+              </button>
             </form>
           </div>
         </main>

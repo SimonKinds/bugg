@@ -111,6 +111,7 @@ body {
 
 .note-taking-area {
   display: flex;
+  margin-bottom: 2rem;
 }
 
 .note-taking-column {
@@ -135,19 +136,19 @@ body {
 }
 
 .note-taking-column-item--blue {
-  border-top: 0.2rem solid #B2DFE5;
+  border-top: 0.2rem solid #b2dfe5;
 }
 
 .note-taking-column-item--red {
-  border-top: 0.2rem solid #E5BBB2;
+  border-top: 0.2rem solid #e5bbb2;
 }
 
 .note-taking-column-item--green {
-  border-top: 0.2rem solid #C3E5B2;
+  border-top: 0.2rem solid #c3e5b2;
 }
 
 .note-taking-column-item--purple {
-  border-top: 0.2rem solid #BDB2E5;
+  border-top: 0.2rem solid #bdb2e5;
 }
 
 .note-taking-column-item-header {
@@ -179,4 +180,29 @@ body {
 .note-taking-item-option-value {
   margin: 0;
   margin-right: 1rem;
+}
+
+.note-taking-submit-button {
+  float: right;
+  
+  height: 5rem;
+  width: 12rem;
+  margin: 0;
+
+  outline: none;
+
+  border: none;
+  border-radius: 0.8rem;
+
+  text-decoration: none;
+  background: #569ab8;
+  color: #fefefe;
+  font-family: sans-serif;
+  font-size: 2rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.note-taking-submit-button:active {
+  transform: scale(0.99);
 }
