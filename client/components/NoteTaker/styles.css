@@ -1,16 +1,14 @@
 .couple-picker-container {
   margin: 4rem 0;
   display:flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .couple-picker {
   height: 5rem;
   width: 12rem;
-  margin: 0;
-}
+  margin: auto;
 
-.couple-picker--visible {
   outline: none;
 
   display: inline-block;
@@ -25,12 +23,12 @@
   text-align: center;
 }
 
-.couple-picker--visible:hover,
-.couple-picker--visible:focus {
+.couple-picker:hover,
+.couple-picker:focus {
   border: 0.3rem solid #2d29e2;
 }
 
-.couple-picker--visible:active {
+.couple-picker:active {
   transform: scale(0.99);
 }
 

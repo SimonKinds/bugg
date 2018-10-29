@@ -34,7 +34,7 @@ class NoteTakerContainer extends React.Component<
         <CouplePicker
           onClick={this.selectCouple}
           coupleIdsForHumans={["c1", "c2", "c3", "c4", "c5"]}
-          selectedCoupleIdForHuman={"c3"}
+          selectedCoupleIdForHuman={this.state.selectedCouple}
         />
         <div>
           <form>
@@ -135,13 +135,18 @@ type CouplePickerButtonProps = {
 };
 function CouplePickerButton({
   coupleIdForHumans,
-  selected
+  selected,
+  onClick
 }: CouplePickerButtonProps) {
   const extendedClassName = selected ? "couple-picker--selected" : "";
-  const className = "couple-picker couple-picker--visible " + extendedClassName;
+  const className = "couple-picker " + extendedClassName;
 
   return (
-    <button type="button" className={className}>
+    <button
+      type="button"
+      className={className}
+      onClick={() => onClick(coupleIdForHumans)}
+    >
       {coupleIdForHumans}
     </button>
   );
