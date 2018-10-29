@@ -2,6 +2,8 @@
 
 import React from "react";
 
+import "./styles.css";
+
 type NoteTakerContainerProps = {
   couples: Array<{
     coupleIdForHumans: string,
@@ -16,25 +18,24 @@ class NoteTakerContainer extends React.Component<
   NoteTakerContainerProps,
   NoteTakerContainerState
 > {
+  state = {
+    selectedCouple:
+      this.props.couples.length > 0
+        ? this.props.couples[0].coupleIdForHumans
+        : ""
+  };
+
+  selectCouple = (coupleIdForHuman: string) =>
+    this.setState({ selectedCouple: coupleIdForHuman });
+
   render() {
     return (
       <>
-        <div className="couple-picker-container">
-          <div className="couple-picker-row">
-            <CouplePickerButton coupleIdForHumans={"48 - 33"} />
-            <CouplePickerButton empty />
-            <CouplePickerButton coupleIdForHumans={"48 - 33"} />
-            <CouplePickerButton empty />
-            <CouplePickerButton coupleIdForHumans={"48 - 33"} />
-          </div>
-          <div className="couple-picker-row">
-            <CouplePickerButton empty />
-            <CouplePickerButton coupleIdForHumans={"48 - 33"} />
-            <CouplePickerButton empty />
-            <CouplePickerButton coupleIdForHumans={"48 - 33"} />
-            <CouplePickerButton empty />
-          </div>
-        </div>
+        <CouplePicker
+          onClick={this.selectCouple}
+          coupleIdsForHumans={["c1", "c2", "c3", "c4", "c5"]}
+          selectedCoupleIdForHuman={"c3"}
+        />
         <div>
           <form>
             <div className="note-taking-area">
@@ -48,19 +49,19 @@ class NoteTakerContainer extends React.Component<
                 />
                 <NoteTakerColumnItem
                   participantId="48"
-                  criterionName="sexiness"
+                  criterionName="esthetics"
                   color="red"
                   values={[0, 1, 2, 3, 4]}
                 />
                 <NoteTakerColumnItem
                   participantId="48"
-                  criterionName="looks"
+                  criterionName="connection"
                   color="green"
                   values={[0, 1, 2, 3, 4]}
                 />
                 <NoteTakerColumnItem
                   participantId="48"
-                  criterionName="smell"
+                  criterionName="improv"
                   color="purple"
                   values={[0, 1, 2, 3, 4]}
                 />
@@ -75,19 +76,19 @@ class NoteTakerContainer extends React.Component<
                 />
                 <NoteTakerColumnItem
                   participantId="33"
-                  criterionName="sexiness"
+                  criterionName="esthetics"
                   color="red"
                   values={[0, 1, 2, 3, 4]}
                 />
                 <NoteTakerColumnItem
                   participantId="33"
-                  criterionName="looks"
+                  criterionName="connection"
                   color="green"
                   values={[0, 1, 2, 3, 4]}
                 />
                 <NoteTakerColumnItem
                   participantId="33"
-                  criterionName="smell"
+                  criterionName="improv"
                   color="purple"
                   values={[0, 1, 2, 3, 4]}
                 />
@@ -103,20 +104,44 @@ class NoteTakerContainer extends React.Component<
   }
 }
 
+type CouplePickerProps = {
+  coupleIdsForHumans: Array<string>,
+  selectedCoupleIdForHuman: string,
+  onClick: (coupleIdForHumans: string) => void
+};
+function CouplePicker({
+  coupleIdsForHumans,
+  selectedCoupleIdForHuman,
+  onClick
+}: CouplePickerProps) {
+  return (
+    <div className="couple-picker-container">
+      {coupleIdsForHumans.map(coupleIdForHuman => (
+        <CouplePickerButton
+          key={coupleIdForHuman}
+          coupleIdForHumans={coupleIdForHuman}
+          onClick={onClick}
+          selected={coupleIdForHuman === selectedCoupleIdForHuman}
+        />
+      ))}
+    </div>
+  );
+}
+
 type CouplePickerButtonProps = {
-  coupleIdForHumans?: string,
-  empty?: boolean
+  coupleIdForHumans: string,
+  selected: boolean,
+  onClick: (coupleIdForHumans: string) => void
 };
 function CouplePickerButton({
   coupleIdForHumans,
-  empty
+  selected
 }: CouplePickerButtonProps) {
-  if (empty) {
-    return <span className="couple-picker" />;
-  }
+  const extendedClassName = selected ? "couple-picker--selected" : "";
+  const className = "couple-picker couple-picker--visible " + extendedClassName;
 
   return (
-    <button type="button" className="couple-picker couple-picker--visible">
+    <button type="button" className={className}>
       {coupleIdForHumans}
     </button>
   );
