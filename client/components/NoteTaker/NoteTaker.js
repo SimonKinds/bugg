@@ -39,60 +39,8 @@ class NoteTakerContainer extends React.Component<
         <div>
           <form>
             <div className="note-taking-area">
-              <div className="note-taking-column">
-                <h2 className="note-taking-column-header">48</h2>
-                <NoteTakerColumnItem
-                  participantId="48"
-                  criterionName="style"
-                  color="blue"
-                  values={[0, 1, 2, 3, 4]}
-                />
-                <NoteTakerColumnItem
-                  participantId="48"
-                  criterionName="esthetics"
-                  color="red"
-                  values={[0, 1, 2, 3, 4]}
-                />
-                <NoteTakerColumnItem
-                  participantId="48"
-                  criterionName="connection"
-                  color="green"
-                  values={[0, 1, 2, 3, 4]}
-                />
-                <NoteTakerColumnItem
-                  participantId="48"
-                  criterionName="improv"
-                  color="purple"
-                  values={[0, 1, 2, 3, 4]}
-                />
-              </div>
-              <div className="note-taking-column">
-                <h2 className="note-taking-column-header">33</h2>
-                <NoteTakerColumnItem
-                  participantId="33"
-                  criterionName="style"
-                  color="blue"
-                  values={[0, 1, 2, 3, 4]}
-                />
-                <NoteTakerColumnItem
-                  participantId="33"
-                  criterionName="esthetics"
-                  color="red"
-                  values={[0, 1, 2, 3, 4]}
-                />
-                <NoteTakerColumnItem
-                  participantId="33"
-                  criterionName="connection"
-                  color="green"
-                  values={[0, 1, 2, 3, 4]}
-                />
-                <NoteTakerColumnItem
-                  participantId="33"
-                  criterionName="improv"
-                  color="purple"
-                  values={[0, 1, 2, 3, 4]}
-                />
-              </div>
+              <NoteTakerColumn participantId="48" />
+              <NoteTakerColumn participantId="33" />
             </div>
             <button type="submit" className="note-taking-submit-button">
               Submit
@@ -153,6 +101,41 @@ function CouplePickerButton({
 }
 
 type NoteTakerColumnProps = {
+  participantId: string
+};
+function NoteTakerColumn({ participantId }: NoteTakerColumnProps) {
+  return (
+    <div className="note-taking-column">
+      <h2 className="note-taking-column-header">{participantId}</h2>
+      <NoteTakerColumnItem
+        participantId={participantId}
+        criterionName="style"
+        color="blue"
+        values={[0, 1, 2, 3, 4]}
+      />
+      <NoteTakerColumnItem
+        participantId={participantId}
+        criterionName="esthetics"
+        color="red"
+        values={[0, 1, 2, 3, 4]}
+      />
+      <NoteTakerColumnItem
+        participantId={participantId}
+        criterionName="connection"
+        color="green"
+        values={[0, 1, 2, 3, 4]}
+      />
+      <NoteTakerColumnItem
+        participantId={participantId}
+        criterionName="improv"
+        color="purple"
+        values={[0, 1, 2, 3, 4]}
+      />
+    </div>
+  );
+}
+
+type NoteTakerColumnItemProps = {
   participantId: string,
   criterionName: string,
   values: Array<number>,
@@ -163,7 +146,7 @@ function NoteTakerColumnItem({
   criterionName,
   values,
   color
-}: NoteTakerColumnProps) {
+}: NoteTakerColumnItemProps) {
   return (
     <fieldset
       className={`note-taking-column-item note-taking-column-item--${color}`}
