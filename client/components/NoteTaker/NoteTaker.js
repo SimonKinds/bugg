@@ -12,35 +12,61 @@ type NoteTakerContainerProps = {
   }>
 };
 type NoteTakerContainerState = {
-  selectedCouple: string
+  selectedCouple: {
+    coupleIdForHumans: string,
+    leaderIdForHumans: string,
+    followerIdForHumans: string
+  }
 };
 class NoteTakerContainer extends React.Component<
   NoteTakerContainerProps,
   NoteTakerContainerState
 > {
   state = {
-    selectedCouple:
-      this.props.couples.length > 0
-        ? this.props.couples[0].coupleIdForHumans
-        : ""
+    selectedCouple: this.props.couples[0]
   };
 
-  selectCouple = (coupleIdForHuman: string) =>
-    this.setState({ selectedCouple: coupleIdForHuman });
+  selectCouple = (coupleIdForHumans: string) => {
+    const { couples } = this.props;
+    const newSelectedCouple = couples.find(
+      couple => couple.coupleIdForHumans === coupleIdForHumans
+    );
+
+    if (newSelectedCouple == null) {
+      // eslint-disable-next-line no-console
+      console.error("Selected couple does not exist");
+    } else {
+      this.setState({ selectedCouple: newSelectedCouple });
+    }
+  };
 
   render() {
+    if (this.state.selectedCouple == null) {
+      // eslint-disable-next-line no-console
+      console.error("Expects at least one couple");
+      return null;
+    }
+
+    const coupleIdsForHumans = this.props.couples.map(
+      couple => couple.coupleIdForHumans
+    );
+
     return (
       <>
         <CouplePicker
           onClick={this.selectCouple}
-          coupleIdsForHumans={["c1", "c2", "c3", "c4", "c5"]}
-          selectedCoupleIdForHuman={this.state.selectedCouple}
+          coupleIdsForHumans={coupleIdsForHumans}
+          selectedCoupleIdForHuman={this.state.selectedCouple.coupleIdForHumans}
         />
         <div>
           <form>
             <div className="note-taking-area">
-              <NoteTakerColumn participantId="48" />
-              <NoteTakerColumn participantId="33" />
+              <NoteTakerColumn
+                participantId={this.state.selectedCouple.leaderIdForHumans}
+              />
+              <NoteTakerColumn
+                participantId={this.state.selectedCouple.followerIdForHumans}
+              />
             </div>
             <button type="submit" className="note-taking-submit-button">
               Submit

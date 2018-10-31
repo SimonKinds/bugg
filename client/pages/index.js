@@ -6,6 +6,15 @@ import NoteTaker from "../components/NoteTaker";
 
 import "./styles.css";
 
+const leaders = ["11", "22", "33", "44", "55"];
+const followers = ["16", "81", "94", "23", "17"];
+
+const couples = leaders.map((leader, i) => ({
+  coupleIdForHumans: `${leader} - ${followers[i]}`,
+  leaderIdForHumans: leader,
+  followerIdForHumans: followers[i]
+}));
+
 function IndexPage() {
   return (
     <>
@@ -32,7 +41,7 @@ function IndexPage() {
           </div>
         </div>
         <main>
-          <NoteTaker couples={[]} />
+          <NoteTaker couples={couples} />
         </main>
       </div>
     </>
