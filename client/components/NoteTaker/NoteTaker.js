@@ -51,21 +51,23 @@ class NoteTakerContainer extends React.Component<
       couple => couple.coupleIdForHumans
     );
 
+    const { selectedCouple } = this.state;
+
     return (
       <>
         <CouplePicker
           onClick={this.selectCouple}
           coupleIdsForHumans={coupleIdsForHumans}
-          selectedCoupleIdForHuman={this.state.selectedCouple.coupleIdForHumans}
+          selectedCoupleIdForHuman={selectedCouple.coupleIdForHumans}
         />
         <div>
           <form>
             <div className="note-taking-area">
               <NoteTakerColumn
-                participantId={this.state.selectedCouple.leaderIdForHumans}
+                participantId={selectedCouple.leaderIdForHumans}
               />
               <NoteTakerColumn
-                participantId={this.state.selectedCouple.followerIdForHumans}
+                participantId={selectedCouple.followerIdForHumans}
               />
             </div>
             <button type="submit" className="note-taking-submit-button">
@@ -133,30 +135,20 @@ function NoteTakerColumn({ participantId }: NoteTakerColumnProps) {
   return (
     <div className="note-taking-column">
       <h2 className="note-taking-column-header">{participantId}</h2>
-      <NoteTakerColumnItem
-        participantId={participantId}
-        criterionName="style"
-        color="blue"
-        values={[0, 1, 2, 3, 4]}
-      />
-      <NoteTakerColumnItem
-        participantId={participantId}
-        criterionName="esthetics"
-        color="red"
-        values={[0, 1, 2, 3, 4]}
-      />
-      <NoteTakerColumnItem
-        participantId={participantId}
-        criterionName="connection"
-        color="green"
-        values={[0, 1, 2, 3, 4]}
-      />
-      <NoteTakerColumnItem
-        participantId={participantId}
-        criterionName="improv"
-        color="purple"
-        values={[0, 1, 2, 3, 4]}
-      />
+      {[
+        { criterionName: "style", color: "blue" },
+        { criterionName: "esthethics", color: "red" },
+        { criterionName: "connection", color: "green" },
+        { criterionName: "improv", color: "purple" }
+      ].map(({ criterionName, color }) => (
+        <NoteTakerColumnItem
+          key={`${participantId}-${criterionName}`}
+          participantId={participantId}
+          criterionName={criterionName}
+          color={color}
+          values={[0, 1, 2, 3, 4]}
+        />
+      ))}
     </div>
   );
 }
