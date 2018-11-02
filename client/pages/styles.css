@@ -3,6 +3,8 @@ html {
 }
 
 body {
+  --max-content-width: 768px;
+
   margin: 0;
   background-color: #fafafa;
 }
@@ -13,17 +15,19 @@ body {
   background-color: #fefefe;
   display: flex;
   align-content: center;
+  justify-content: center;
 }
 
 .container {
   padding: 1rem;
-  max-width: 768px;
+  max-width: var(--max-content-width);
   margin: auto;
 }
 
 .site-name {
   font-size: 2.4rem;
   margin: auto 15px;
+  width: var(--max-content-width);
 }
 
 .note-taking-information {
