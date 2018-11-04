@@ -64,11 +64,8 @@ class NoteTakerContainer extends React.Component<
         <div>
           <form>
             <NoteTakingArea
-              selectedCoupleIndex={this.props.couples.findIndex(
-                couple =>
-                  selectedCouple.coupleIdForHumans === couple.coupleIdForHumans
-              )}
-              coupleCount={this.props.couples.length}
+              selectedCoupleIdForHumans={selectedCouple.coupleIdForHumans}
+              coupleIdsForHumans={coupleIdsForHumans}
               criterionCount={4}
             >
               {({
@@ -102,60 +99,77 @@ class NoteTakerContainer extends React.Component<
 }
 
 type NoteTakingAreaProps = {
-  selectedCoupleIndex: number,
-  coupleCount: number,
-  criterionCount: number,
+  selectedCoupleIdForHumans: string,
+  coupleIdsForHumans: Array<string>,
   children: ({
-    selectedValuesLeader: Array<?number>,
-    selectValueLeader: (value: number, at: number) => void,
-    selectedValuesFollower: Array<?number>,
-    selectValueFollower: (value: number, at: number) => void
+    selectedValuesLeader: { [criterionName: string]: ?number },
+    selectValueLeader: (value: number, citerionName: string) => void,
+    selectedValuesFollower: { [criterionName: string]: ?number },
+    selectValueFollower: (value: number, citerionName: string) => void
   }) => ReactNode
 };
 type NoteTakingAreaState = {
-  selectedValuesLeader: Array<Array<?number>>,
-  selectedValuesFollower: Array<Array<?number>>
+  selectedValuesLeader: {
+    [coupleIdForHumans: string]: { [criterionName: string]: ?number }
+  },
+  selectedValuesFollower: {
+    [coupleIdForHumans: string]: { [criterionName: string]: ?number }
+  }
 };
 class NoteTakingArea extends React.Component<
   NoteTakingAreaProps,
   NoteTakingAreaState
 > {
   state = {
-    selectedValuesLeader: new Array(this.props.coupleCount).fill(
-      new Array(this.props.criterionCount).fill(null)
+    selectedValuesLeader: this.props.coupleIdsForHumans.reduce(
+      (selectedValues, coupleIdForHumans) => ({
+        ...selectedValues,
+        [coupleIdForHumans]: {}
+      }),
+      {}
     ),
-    selectedValuesFollower: new Array(this.props.coupleCount).fill(
-      new Array(this.props.criterionCount).fill(null)
+    selectedValuesFollower: this.props.coupleIdsForHumans.reduce(
+      (selectedValues, coupleIdForHumans) => ({
+        ...selectedValues,
+        [coupleIdForHumans]: {}
+      }),
+      {}
     )
   };
 
   render() {
-    const { selectedCoupleIndex } = this.props;
+    const { selectedCoupleIdForHumans } = this.props;
 
     return this.props.children({
       selectedValuesLeader: this.state.selectedValuesLeader[
-        selectedCoupleIndex
+        selectedCoupleIdForHumans
       ],
-      selectValueLeader: (value, at) => {
-        const updatedOuter = [...this.state.selectedValuesLeader];
-        const updatedInner = [...updatedOuter[selectedCoupleIndex]];
-
-        updatedInner[at] = value;
-        updatedOuter[selectedCoupleIndex] = updatedInner;
-
-        this.setState({ selectedValuesLeader: updatedOuter });
+      selectValueLeader: (value, criterionName) => {
+        const { selectedValuesLeader } = this.state;
+        this.setState({
+          selectedValuesLeader: {
+            ...selectedValuesLeader,
+            [selectedCoupleIdForHumans]: {
+              ...selectedValuesLeader[selectedCoupleIdForHumans],
+              [criterionName]: value
+            }
+          }
+        });
       },
       selectedValuesFollower: this.state.selectedValuesFollower[
-        selectedCoupleIndex
+        selectedCoupleIdForHumans
       ],
-      selectValueFollower: (value, at) => {
-        const updatedOuter = [...this.state.selectedValuesFollower];
-        const updatedInner = [...updatedOuter[selectedCoupleIndex]];
-
-        updatedInner[at] = value;
-        updatedOuter[selectedCoupleIndex] = updatedInner;
-
-        this.setState({ selectedValuesFollower: updatedOuter });
+      selectValueFollower: (value, criterionName) => {
+        const { selectedValuesFollower } = this.state;
+        this.setState({
+          selectedValuesFollower: {
+            ...selectedValuesFollower,
+            [selectedCoupleIdForHumans]: {
+              ...selectedValuesFollower[selectedCoupleIdForHumans],
+              [criterionName]: value
+            }
+          }
+        });
       }
     });
   }
@@ -211,33 +225,31 @@ function CouplePickerButton({
 
 type NoteTakerColumnProps = {
   participantId: string,
-  selectedValues: Array<?number>,
-  selectValue: (value: number, at: number) => void
+  selectedValues: { [criterionName: string]: ?number },
+  selectValue: (value: number, criterionName: string) => void
 };
 function NoteTakerColumn({
   participantId,
   selectedValues,
   selectValue
 }: NoteTakerColumnProps) {
-  const criterion = [
-    { criterionName: "style", color: "blue" },
-    { criterionName: "esthethics", color: "red" },
-    { criterionName: "connection", color: "green" },
-    { criterionName: "improv", color: "purple" }
-  ].map((criterion, i) => ({ ...criterion, selectedValue: selectedValues[i] }));
-
   return (
     <div className="note-taking-column">
       <h2 className="note-taking-column-header">{participantId}</h2>
-      {criterion.map(({ criterionName, color, selectedValue }, i) => (
+      {[
+        { criterionName: "style", color: "blue" },
+        { criterionName: "esthethics", color: "red" },
+        { criterionName: "connection", color: "green" },
+        { criterionName: "improv", color: "purple" }
+      ].map(({ criterionName, color }) => (
         <NoteTakerColumnItem
           key={`${participantId}-${criterionName}`}
           participantId={participantId}
           criterionName={criterionName}
           color={color}
           values={[0, 1, 2, 3, 4]}
-          selectedValue={selectedValue}
-          selectValue={(value: number) => selectValue(value, i)}
+          selectedValue={selectedValues[criterionName]}
+          selectValue={(value: number) => selectValue(value, criterionName)}
         />
       ))}
     </div>
