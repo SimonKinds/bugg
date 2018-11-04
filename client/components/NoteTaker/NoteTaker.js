@@ -61,54 +61,38 @@ class NoteTakerContainer extends React.Component<
           coupleIdsForHumans={coupleIdsForHumans}
           selectedCoupleIdForHuman={selectedCouple.coupleIdForHumans}
         />
-        <div>
-          <form>
-            <NoteTakingArea
-              selectedCoupleIdForHumans={selectedCouple.coupleIdForHumans}
-              coupleIdsForHumans={coupleIdsForHumans}
-              criterionCount={4}
-            >
-              {({
-                selectedValuesLeader,
-                selectValueLeader,
-                selectedValuesFollower,
-                selectValueFollower
-              }) => (
-                <div className="note-taking-area">
-                  <NoteTakerColumn
-                    participantId={selectedCouple.leaderIdForHumans}
-                    selectedValues={selectedValuesLeader}
-                    selectValue={selectValueLeader}
-                  />
-                  <NoteTakerColumn
-                    participantId={selectedCouple.followerIdForHumans}
-                    selectedValues={selectedValuesFollower}
-                    selectValue={selectValueFollower}
-                  />
-                </div>
-              )}
-            </NoteTakingArea>
-            <button type="submit" className="note-taking-submit-button">
-              Submit
-            </button>
-          </form>
-        </div>
+        <NoteTakingForm
+          onSubmit={notes => alert(JSON.stringify(notes))}
+          selectedCoupleIdForHumans={selectedCouple.coupleIdForHumans}
+          coupleIdsForHumans={coupleIdsForHumans}
+          criterionCount={4}
+        >
+          {({
+            selectedValuesLeader,
+            selectValueLeader,
+            selectedValuesFollower,
+            selectValueFollower
+          }) => (
+            <>
+              <NoteTakerColumn
+                participantId={selectedCouple.leaderIdForHumans}
+                selectedValues={selectedValuesLeader}
+                selectValue={selectValueLeader}
+              />
+              <NoteTakerColumn
+                participantId={selectedCouple.followerIdForHumans}
+                selectedValues={selectedValuesFollower}
+                selectValue={selectValueFollower}
+              />
+            </>
+          )}
+        </NoteTakingForm>
       </>
     );
   }
 }
 
-type NoteTakingAreaProps = {
-  selectedCoupleIdForHumans: string,
-  coupleIdsForHumans: Array<string>,
-  children: ({
-    selectedValuesLeader: { [criterionName: string]: ?number },
-    selectValueLeader: (value: number, citerionName: string) => void,
-    selectedValuesFollower: { [criterionName: string]: ?number },
-    selectValueFollower: (value: number, citerionName: string) => void
-  }) => ReactNode
-};
-type NoteTakingAreaState = {
+type NoteTakingFormState = {
   selectedValuesLeader: {
     [coupleIdForHumans: string]: { [criterionName: string]: ?number }
   },
@@ -116,9 +100,21 @@ type NoteTakingAreaState = {
     [coupleIdForHumans: string]: { [criterionName: string]: ?number }
   }
 };
-class NoteTakingArea extends React.Component<
-  NoteTakingAreaProps,
-  NoteTakingAreaState
+type NoteTakingFormProps = {
+  selectedCoupleIdForHumans: string,
+  coupleIdsForHumans: Array<string>,
+  children: ({
+    selectedValuesLeader: { [criterionName: string]: ?number },
+    selectValueLeader: (value: number, citerionName: string) => void,
+    selectedValuesFollower: { [criterionName: string]: ?number },
+    selectValueFollower: (value: number, citerionName: string) => void
+  }) => ReactNode,
+
+  onSubmit: (notes: NoteTakingFormState) => void
+};
+class NoteTakingForm extends React.Component<
+  NoteTakingFormProps,
+  NoteTakingFormState
 > {
   state = {
     selectedValuesLeader: this.props.coupleIdsForHumans.reduce(
@@ -140,38 +136,53 @@ class NoteTakingArea extends React.Component<
   render() {
     const { selectedCoupleIdForHumans } = this.props;
 
-    return this.props.children({
-      selectedValuesLeader: this.state.selectedValuesLeader[
-        selectedCoupleIdForHumans
-      ],
-      selectValueLeader: (value, criterionName) => {
-        const { selectedValuesLeader } = this.state;
-        this.setState({
-          selectedValuesLeader: {
-            ...selectedValuesLeader,
-            [selectedCoupleIdForHumans]: {
-              ...selectedValuesLeader[selectedCoupleIdForHumans],
-              [criterionName]: value
+    return (
+      <form
+        onSubmit={event => {
+          event.preventDefault();
+          this.props.onSubmit(this.state);
+        }}
+      >
+        <div className="note-taking-area">
+          {this.props.children({
+            selectedValuesLeader: this.state.selectedValuesLeader[
+              selectedCoupleIdForHumans
+            ],
+            selectValueLeader: (value, criterionName) => {
+              const { selectedValuesLeader } = this.state;
+              this.setState({
+                selectedValuesLeader: {
+                  ...selectedValuesLeader,
+                  [selectedCoupleIdForHumans]: {
+                    ...selectedValuesLeader[selectedCoupleIdForHumans],
+                    [criterionName]: value
+                  }
+                }
+              });
+            },
+            selectedValuesFollower: this.state.selectedValuesFollower[
+              selectedCoupleIdForHumans
+            ],
+            selectValueFollower: (value, criterionName) => {
+              const { selectedValuesFollower } = this.state;
+              this.setState({
+                selectedValuesFollower: {
+                  ...selectedValuesFollower,
+                  [selectedCoupleIdForHumans]: {
+                    ...selectedValuesFollower[selectedCoupleIdForHumans],
+                    [criterionName]: value
+                  }
+                }
+              });
             }
-          }
-        });
-      },
-      selectedValuesFollower: this.state.selectedValuesFollower[
-        selectedCoupleIdForHumans
-      ],
-      selectValueFollower: (value, criterionName) => {
-        const { selectedValuesFollower } = this.state;
-        this.setState({
-          selectedValuesFollower: {
-            ...selectedValuesFollower,
-            [selectedCoupleIdForHumans]: {
-              ...selectedValuesFollower[selectedCoupleIdForHumans],
-              [criterionName]: value
-            }
-          }
-        });
-      }
-    });
+          })}
+        </div>
+
+        <button type="submit" className="note-taking-submit-button">
+          Submit
+        </button>
+      </form>
+    );
   }
 }
 
