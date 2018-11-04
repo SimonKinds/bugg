@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import type { Node as ReactNode } from "react";
 
 import "./styles.css";
 
@@ -62,14 +63,27 @@ class NoteTakerContainer extends React.Component<
         />
         <div>
           <form>
-            <div className="note-taking-area">
-              <NoteTakerColumn
-                participantId={selectedCouple.leaderIdForHumans}
-              />
-              <NoteTakerColumn
-                participantId={selectedCouple.followerIdForHumans}
-              />
-            </div>
+            <NoteTakingArea criterionCount={4}>
+              {({
+                selectedValuesLeader,
+                selectValueLeader,
+                selectedValuesFollower,
+                selectValueFollower
+              }) => (
+                <div className="note-taking-area">
+                  <NoteTakerColumn
+                    participantId={selectedCouple.leaderIdForHumans}
+                    selectedValues={selectedValuesLeader}
+                    selectValue={selectValueLeader}
+                  />
+                  <NoteTakerColumn
+                    participantId={selectedCouple.followerIdForHumans}
+                    selectedValues={selectedValuesFollower}
+                    selectValue={selectValueFollower}
+                  />
+                </div>
+              )}
+            </NoteTakingArea>
             <button type="submit" className="note-taking-submit-button">
               Submit
             </button>
@@ -77,6 +91,46 @@ class NoteTakerContainer extends React.Component<
         </div>
       </>
     );
+  }
+}
+
+type NoteTakingAreaProps = {
+  criterionCount: number,
+  children: ({
+    selectedValuesLeader: Array<?number>,
+    selectValueLeader: (value: number, at: number) => void,
+    selectedValuesFollower: Array<?number>,
+    selectValueFollower: (value: number, at: number) => void
+  }) => ReactNode
+};
+type NoteTakingAreaState = {
+  selectedValuesLeader: Array<?number>,
+  selectedValuesFollower: Array<?number>
+};
+class NoteTakingArea extends React.Component<
+  NoteTakingAreaProps,
+  NoteTakingAreaState
+> {
+  state = {
+    selectedValuesLeader: new Array(this.props.criterionCount).fill(null),
+    selectedValuesFollower: new Array(this.props.criterionCount).fill(null)
+  };
+
+  render() {
+    return this.props.children({
+      selectedValuesLeader: this.state.selectedValuesLeader,
+      selectValueLeader: (value, at) => {
+        const updated = [...this.state.selectedValuesLeader];
+        updated[at] = value;
+        this.setState({ selectedValuesLeader: updated });
+      },
+      selectedValuesFollower: this.state.selectedValuesFollower,
+      selectValueFollower: (value, at) => {
+        const updated = [...this.state.selectedValuesFollower];
+        updated[at] = value;
+        this.setState({ selectedValuesFollower: updated });
+      }
+    });
   }
 }
 
@@ -129,24 +183,34 @@ function CouplePickerButton({
 }
 
 type NoteTakerColumnProps = {
-  participantId: string
+  participantId: string,
+  selectedValues: Array<?number>,
+  selectValue: (value: number, at: number) => void
 };
-function NoteTakerColumn({ participantId }: NoteTakerColumnProps) {
+function NoteTakerColumn({
+  participantId,
+  selectedValues,
+  selectValue
+}: NoteTakerColumnProps) {
+  const criterion = [
+    { criterionName: "style", color: "blue" },
+    { criterionName: "esthethics", color: "red" },
+    { criterionName: "connection", color: "green" },
+    { criterionName: "improv", color: "purple" }
+  ].map((criterion, i) => ({ ...criterion, selectedValue: selectedValues[i] }));
+
   return (
     <div className="note-taking-column">
       <h2 className="note-taking-column-header">{participantId}</h2>
-      {[
-        { criterionName: "style", color: "blue" },
-        { criterionName: "esthethics", color: "red" },
-        { criterionName: "connection", color: "green" },
-        { criterionName: "improv", color: "purple" }
-      ].map(({ criterionName, color }) => (
+      {criterion.map(({ criterionName, color, selectedValue }, i) => (
         <NoteTakerColumnItem
           key={`${participantId}-${criterionName}`}
           participantId={participantId}
           criterionName={criterionName}
           color={color}
           values={[0, 1, 2, 3, 4]}
+          selectedValue={selectedValue}
+          selectValue={(value: number) => selectValue(value, i)}
         />
       ))}
     </div>
@@ -156,14 +220,19 @@ function NoteTakerColumn({ participantId }: NoteTakerColumnProps) {
 type NoteTakerColumnItemProps = {
   participantId: string,
   criterionName: string,
+  color: "blue" | "red" | "green" | "purple",
+
   values: Array<number>,
-  color: "blue" | "red" | "green" | "purple"
+  selectedValue: ?number,
+  selectValue: (value: number) => void
 };
 function NoteTakerColumnItem({
   participantId,
   criterionName,
   values,
-  color
+  color,
+  selectedValue,
+  selectValue
 }: NoteTakerColumnItemProps) {
   return (
     <fieldset
@@ -177,6 +246,8 @@ function NoteTakerColumnItem({
             participantId={participantId}
             criterionName={criterionName}
             value={value}
+            selected={value === selectedValue}
+            selectValue={selectValue}
           />
         ))}
       </div>
@@ -187,12 +258,16 @@ function NoteTakerColumnItem({
 type NoteTakerColumnItemOptionProps = {
   participantId: string,
   criterionName: string,
-  value: number
+  value: number,
+  selected: boolean,
+  selectValue: (value: number) => void
 };
 function NoteTakerColumnItemOption({
   participantId,
   criterionName,
-  value
+  value,
+  selected,
+  selectValue
 }: NoteTakerColumnItemOptionProps) {
   return (
     <label
@@ -205,6 +280,10 @@ function NoteTakerColumnItemOption({
         type="radio"
         className="note-taking-item-option-value"
         value={value}
+        checked={selected}
+        onChange={({ currentTarget }) => {
+          selectValue(parseInt(currentTarget.value, 10));
+        }}
       />
       {value}
     </label>
