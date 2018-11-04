@@ -63,7 +63,14 @@ class NoteTakerContainer extends React.Component<
         />
         <div>
           <form>
-            <NoteTakingArea criterionCount={4}>
+            <NoteTakingArea
+              selectedCoupleIndex={this.props.couples.findIndex(
+                couple =>
+                  selectedCouple.coupleIdForHumans === couple.coupleIdForHumans
+              )}
+              coupleCount={this.props.couples.length}
+              criterionCount={4}
+            >
               {({
                 selectedValuesLeader,
                 selectValueLeader,
@@ -95,6 +102,8 @@ class NoteTakerContainer extends React.Component<
 }
 
 type NoteTakingAreaProps = {
+  selectedCoupleIndex: number,
+  coupleCount: number,
   criterionCount: number,
   children: ({
     selectedValuesLeader: Array<?number>,
@@ -104,31 +113,49 @@ type NoteTakingAreaProps = {
   }) => ReactNode
 };
 type NoteTakingAreaState = {
-  selectedValuesLeader: Array<?number>,
-  selectedValuesFollower: Array<?number>
+  selectedValuesLeader: Array<Array<?number>>,
+  selectedValuesFollower: Array<Array<?number>>
 };
 class NoteTakingArea extends React.Component<
   NoteTakingAreaProps,
   NoteTakingAreaState
 > {
   state = {
-    selectedValuesLeader: new Array(this.props.criterionCount).fill(null),
-    selectedValuesFollower: new Array(this.props.criterionCount).fill(null)
+    selectedValuesLeader: new Array(this.props.coupleCount).fill(
+      new Array(this.props.criterionCount).fill(null)
+    ),
+    selectedValuesFollower: new Array(this.props.coupleCount).fill(
+      new Array(this.props.criterionCount).fill(null)
+    )
   };
 
   render() {
+    const { selectedCoupleIndex } = this.props;
+
     return this.props.children({
-      selectedValuesLeader: this.state.selectedValuesLeader,
+      selectedValuesLeader: this.state.selectedValuesLeader[
+        selectedCoupleIndex
+      ],
       selectValueLeader: (value, at) => {
-        const updated = [...this.state.selectedValuesLeader];
-        updated[at] = value;
-        this.setState({ selectedValuesLeader: updated });
+        const updatedOuter = [...this.state.selectedValuesLeader];
+        const updatedInner = [...updatedOuter[selectedCoupleIndex]];
+
+        updatedInner[at] = value;
+        updatedOuter[selectedCoupleIndex] = updatedInner;
+
+        this.setState({ selectedValuesLeader: updatedOuter });
       },
-      selectedValuesFollower: this.state.selectedValuesFollower,
+      selectedValuesFollower: this.state.selectedValuesFollower[
+        selectedCoupleIndex
+      ],
       selectValueFollower: (value, at) => {
-        const updated = [...this.state.selectedValuesFollower];
-        updated[at] = value;
-        this.setState({ selectedValuesFollower: updated });
+        const updatedOuter = [...this.state.selectedValuesFollower];
+        const updatedInner = [...updatedOuter[selectedCoupleIndex]];
+
+        updatedInner[at] = value;
+        updatedOuter[selectedCoupleIndex] = updatedInner;
+
+        this.setState({ selectedValuesFollower: updatedOuter });
       }
     });
   }
