@@ -5,12 +5,18 @@ import type { Node as ReactNode } from "react";
 
 import "./styles.css";
 
+type CriterionViewModel = {
+  criterionName: string,
+  color: "blue" | "red" | "green" | "purple"
+};
+
 type NoteTakerContainerProps = {
   couples: Array<{
     coupleIdForHumans: string,
     leaderIdForHumans: string,
     followerIdForHumans: string
-  }>
+  }>,
+  criteria: Array<CriterionViewModel>
 };
 type NoteTakerContainerState = {
   selectedCouple: {
@@ -52,6 +58,7 @@ class NoteTakerContainer extends React.Component<
       couple => couple.coupleIdForHumans
     );
 
+    const { criteria } = this.props;
     const { selectedCouple } = this.state;
 
     return (
@@ -62,10 +69,10 @@ class NoteTakerContainer extends React.Component<
           selectedCoupleIdForHuman={selectedCouple.coupleIdForHumans}
         />
         <NoteTakingForm
-          onSubmit={notes => alert(JSON.stringify(notes))}
+          onSubmit={notes => alert("This is us submitting the notes!")}
           selectedCoupleIdForHumans={selectedCouple.coupleIdForHumans}
           coupleIdsForHumans={coupleIdsForHumans}
-          criterionCount={4}
+          criterionCount={criteria.length}
         >
           {({
             selectedValuesLeader,
@@ -76,11 +83,13 @@ class NoteTakerContainer extends React.Component<
             <>
               <NoteTakerColumn
                 participantId={selectedCouple.leaderIdForHumans}
+                criteria={criteria}
                 selectedValues={selectedValuesLeader}
                 selectValue={selectValueLeader}
               />
               <NoteTakerColumn
                 participantId={selectedCouple.followerIdForHumans}
+                criteria={criteria}
                 selectedValues={selectedValuesFollower}
                 selectValue={selectValueFollower}
               />
@@ -236,23 +245,21 @@ function CouplePickerButton({
 
 type NoteTakerColumnProps = {
   participantId: string,
+  criteria: Array<CriterionViewModel>,
+
   selectedValues: { [criterionName: string]: ?number },
   selectValue: (value: number, criterionName: string) => void
 };
 function NoteTakerColumn({
   participantId,
+  criteria,
   selectedValues,
   selectValue
 }: NoteTakerColumnProps) {
   return (
     <div className="note-taking-column">
       <h2 className="note-taking-column-header">{participantId}</h2>
-      {[
-        { criterionName: "style", color: "blue" },
-        { criterionName: "esthethics", color: "red" },
-        { criterionName: "connection", color: "green" },
-        { criterionName: "improv", color: "purple" }
-      ].map(({ criterionName, color }) => (
+      {criteria.map(({ criterionName, color }) => (
         <NoteTakerColumnItem
           key={`${participantId}-${criterionName}`}
           participantId={participantId}

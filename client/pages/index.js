@@ -15,6 +15,13 @@ const couples = leaders.map((leader, i) => ({
   followerIdForHumans: followers[i]
 }));
 
+const criteria = [
+  { criterionName: "style", color: "blue" },
+  { criterionName: "esthethics", color: "red" },
+  { criterionName: "connection", color: "green" },
+  { criterionName: "improv", color: "purple" }
+];
+
 function IndexPage() {
   return (
     <>
@@ -41,7 +48,7 @@ function IndexPage() {
           </div>
         </div>
         <main>
-          <NoteTaker couples={couples} />
+          <NoteTaker couples={couples} criteria={criteria} />
         </main>
       </div>
     </>
