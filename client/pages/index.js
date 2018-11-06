@@ -9,17 +9,28 @@ import "./styles.css";
 const leaders = ["11", "22", "33", "44", "55"];
 const followers = ["16", "81", "94", "23", "17"];
 
-const couples = leaders.map((leader, i) => ({
-  coupleIdForHumans: `${leader} - ${followers[i]}`,
-  leaderIdForHumans: leader,
-  followerIdForHumans: followers[i]
-}));
+const couples = leaders.map((leader, i) => `${leader} - ${followers[i]}`);
 
-const criteria = [
+const notableEntities = couples.reduce(
+  (notableEntities, couple, i) => ({
+    ...notableEntities,
+    [couple]: [leaders[i], followers[i]]
+  }),
+  {}
+);
+
+const leaderCriteria = [
   { criterionName: "style", color: "blue" },
   { criterionName: "esthethics", color: "red" },
   { criterionName: "connection", color: "green" },
   { criterionName: "improv", color: "purple" }
+];
+
+const followerCriteria = [
+  { criterionName: "connection", color: "green" },
+  { criterionName: "improv", color: "purple" },
+  { criterionName: "style", color: "blue" },
+  { criterionName: "esthethics", color: "red" }
 ];
 
 function IndexPage() {
@@ -48,7 +59,11 @@ function IndexPage() {
           </div>
         </div>
         <main>
-          <NoteTaker couples={couples} criteria={criteria} />
+          <NoteTaker
+            coupleIdsForHumans={couples}
+            notableEntitiesForHumans={notableEntities}
+            criteriaForNotableEntities={[leaderCriteria, followerCriteria]}
+          />
         </main>
       </div>
     </>

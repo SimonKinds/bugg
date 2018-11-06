@@ -11,113 +11,120 @@ type CriterionViewModel = {
 };
 
 type NoteTakerContainerProps = {
-  couples: Array<{
-    coupleIdForHumans: string,
-    leaderIdForHumans: string,
-    followerIdForHumans: string
-  }>,
-  criteria: Array<CriterionViewModel>
+  coupleIdsForHumans: Array<string>,
+  notableEntitiesForHumans: {
+    [coupleIdForHuman: string]: Array<string>
+  },
+
+  criteriaForNotableEntities: Array<Array<CriterionViewModel>>
 };
 type NoteTakerContainerState = {
-  selectedCouple: {
-    coupleIdForHumans: string,
-    leaderIdForHumans: string,
-    followerIdForHumans: string
-  }
+  selectedCoupleIdForHumans: string,
+  notableEntitiesForHumans: Array<string>
 };
 class NoteTakerContainer extends React.Component<
   NoteTakerContainerProps,
   NoteTakerContainerState
 > {
-  state = {
-    selectedCouple: this.props.couples[0]
-  };
+  state = initializeNoteTakerContainerState(this.props);
 
   selectCouple = (coupleIdForHumans: string) => {
-    const { couples } = this.props;
-    const newSelectedCouple = couples.find(
-      couple => couple.coupleIdForHumans === coupleIdForHumans
-    );
+    const { notableEntitiesForHumans } = this.props;
+    const newSelectedNotableEntities =
+      notableEntitiesForHumans[coupleIdForHumans];
 
-    if (newSelectedCouple == null) {
+    if (newSelectedNotableEntities == null) {
       // eslint-disable-next-line no-console
       console.error("Selected couple does not exist");
     } else {
-      this.setState({ selectedCouple: newSelectedCouple });
+      this.setState({
+        selectedCoupleIdForHumans: coupleIdForHumans,
+        notableEntitiesForHumans: newSelectedNotableEntities
+      });
     }
   };
 
   render() {
-    if (this.state.selectedCouple == null) {
+    if (this.state.selectedCoupleIdForHumans == null) {
       // eslint-disable-next-line no-console
       console.error("Expects at least one couple");
       return null;
     }
 
-    const coupleIdsForHumans = this.props.couples.map(
-      couple => couple.coupleIdForHumans
-    );
-
-    const { criteria } = this.props;
-    const { selectedCouple } = this.state;
+    const { criteriaForNotableEntities, coupleIdsForHumans } = this.props;
+    const { selectedCoupleIdForHumans, notableEntitiesForHumans } = this.state;
 
     return (
       <>
         <CouplePicker
           onClick={this.selectCouple}
           coupleIdsForHumans={coupleIdsForHumans}
-          selectedCoupleIdForHuman={selectedCouple.coupleIdForHumans}
+          selectedCoupleIdForHuman={selectedCoupleIdForHumans}
         />
         <NoteTakingForm
           onSubmit={notes => alert("This is us submitting the notes!")}
-          selectedCoupleIdForHumans={selectedCouple.coupleIdForHumans}
+          selectedCoupleIdForHumans={selectedCoupleIdForHumans}
           coupleIdsForHumans={coupleIdsForHumans}
-          criterionCount={criteria.length}
+          criteriaForNotableEntities={criteriaForNotableEntities}
         >
-          {({
-            selectedValuesLeader,
-            selectValueLeader,
-            selectedValuesFollower,
-            selectValueFollower
-          }) => (
-            <>
+          {({ childProps }) =>
+            childProps.map((props, i) => (
               <NoteTakerColumn
-                participantId={selectedCouple.leaderIdForHumans}
-                criteria={criteria}
-                selectedValues={selectedValuesLeader}
-                selectValue={selectValueLeader}
+                key={notableEntitiesForHumans[i]}
+                participantId={notableEntitiesForHumans[i]}
+                criteriaForNotableEntities={criteriaForNotableEntities}
+                criteria={criteriaForNotableEntities[i]}
+                {...props}
               />
-              <NoteTakerColumn
-                participantId={selectedCouple.followerIdForHumans}
-                criteria={criteria}
-                selectedValues={selectedValuesFollower}
-                selectValue={selectValueFollower}
-              />
-            </>
-          )}
+            ))
+          }
         </NoteTakingForm>
       </>
     );
   }
 }
 
-type NoteTakingFormState = {
-  selectedValuesLeader: {
-    [coupleIdForHumans: string]: { [criterionName: string]: ?number }
-  },
-  selectedValuesFollower: {
-    [coupleIdForHumans: string]: { [criterionName: string]: ?number }
+function initializeNoteTakerContainerState({
+  coupleIdsForHumans,
+  notableEntitiesForHumans,
+  criteriaForNotableEntities
+}: NoteTakerContainerProps): NoteTakerContainerState {
+  const defaultCouple = coupleIdsForHumans[0];
+
+  if (!process.env.NODE_ENV !== "production") {
+    coupleIdsForHumans.forEach(coupleIdForHumans => {
+      const notableEntities = notableEntitiesForHumans[coupleIdForHumans];
+
+      if (notableEntities.length !== criteriaForNotableEntities.length) {
+        // eslint-disable-next-line no-console
+        console.error(
+          "The amount of notable entities must be equal to the amount of criteriaForNotableEntities"
+        );
+      }
+    });
   }
+
+  return {
+    selectedCoupleIdForHumans: defaultCouple,
+    notableEntitiesForHumans: notableEntitiesForHumans[defaultCouple]
+  };
+}
+
+type NoteTakingChildProps = Array<{
+  selectedValues: { [criterionName: string]: ?number },
+  selectValue: (value: number, citerionName: string) => void
+}>;
+type NoteTakingFormState = {
+  selectedValues: Array<{
+    [coupleIdForHumans: string]: { [criterionName: string]: ?number }
+  }>
 };
 type NoteTakingFormProps = {
   selectedCoupleIdForHumans: string,
   coupleIdsForHumans: Array<string>,
-  children: ({
-    selectedValuesLeader: { [criterionName: string]: ?number },
-    selectValueLeader: (value: number, citerionName: string) => void,
-    selectedValuesFollower: { [criterionName: string]: ?number },
-    selectValueFollower: (value: number, citerionName: string) => void
-  }) => ReactNode,
+  criteriaForNotableEntities: Array<Array<CriterionViewModel>>,
+
+  children: ({ childProps: NoteTakingChildProps }) => ReactNode,
 
   onSubmit: (notes: NoteTakingFormState) => void
 };
@@ -126,24 +133,43 @@ class NoteTakingForm extends React.Component<
   NoteTakingFormState
 > {
   state = {
-    selectedValuesLeader: this.props.coupleIdsForHumans.reduce(
-      (selectedValues, coupleIdForHumans) => ({
-        ...selectedValues,
-        [coupleIdForHumans]: {}
-      }),
-      {}
-    ),
-    selectedValuesFollower: this.props.coupleIdsForHumans.reduce(
-      (selectedValues, coupleIdForHumans) => ({
-        ...selectedValues,
-        [coupleIdForHumans]: {}
-      }),
-      {}
+    selectedValues: this.props.criteriaForNotableEntities.map(() =>
+      this.props.coupleIdsForHumans.reduce(
+        (selectedValues, coupleIdForHumans) => ({
+          ...selectedValues,
+          [coupleIdForHumans]: {}
+        }),
+        {}
+      )
     )
   };
 
   render() {
     const { selectedCoupleIdForHumans } = this.props;
+    const { selectedValues } = this.state;
+
+    const childProps: NoteTakingChildProps = this.props.criteriaForNotableEntities.map(
+      (_, i) => ({
+        selectedValues: selectedValues[i][selectedCoupleIdForHumans],
+        selectValue: (value: number, criterionName: string) => {
+          const updatedValues = selectedValues.map((values, j) => {
+            if (i === j) {
+              return {
+                ...values,
+                [selectedCoupleIdForHumans]: {
+                  ...values[selectedCoupleIdForHumans],
+                  [criterionName]: value
+                }
+              };
+            }
+
+            return values;
+          });
+
+          this.setState({ selectedValues: updatedValues });
+        }
+      })
+    );
 
     return (
       <form
@@ -154,36 +180,7 @@ class NoteTakingForm extends React.Component<
       >
         <div className="note-taking-area">
           {this.props.children({
-            selectedValuesLeader: this.state.selectedValuesLeader[
-              selectedCoupleIdForHumans
-            ],
-            selectValueLeader: (value, criterionName) => {
-              const { selectedValuesLeader } = this.state;
-              this.setState({
-                selectedValuesLeader: {
-                  ...selectedValuesLeader,
-                  [selectedCoupleIdForHumans]: {
-                    ...selectedValuesLeader[selectedCoupleIdForHumans],
-                    [criterionName]: value
-                  }
-                }
-              });
-            },
-            selectedValuesFollower: this.state.selectedValuesFollower[
-              selectedCoupleIdForHumans
-            ],
-            selectValueFollower: (value, criterionName) => {
-              const { selectedValuesFollower } = this.state;
-              this.setState({
-                selectedValuesFollower: {
-                  ...selectedValuesFollower,
-                  [selectedCoupleIdForHumans]: {
-                    ...selectedValuesFollower[selectedCoupleIdForHumans],
-                    [criterionName]: value
-                  }
-                }
-              });
-            }
+            childProps
           })}
         </div>
 
