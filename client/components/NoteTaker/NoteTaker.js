@@ -2,6 +2,7 @@
 
 import React from "react";
 import type { Node as ReactNode } from "react";
+import Modal from "react-modal";
 
 import "./styles.css";
 
@@ -117,7 +118,8 @@ type NoteTakingChildProps = Array<{
 type NoteTakingFormState = {
   selectedValues: Array<{
     [coupleIdForHumans: string]: { [criterionName: string]: ?number }
-  }>
+  }>,
+  showConfirmationModal: boolean
 };
 type NoteTakingFormProps = {
   selectedCoupleIdForHumans: string,
@@ -126,7 +128,11 @@ type NoteTakingFormProps = {
 
   children: ({ childProps: NoteTakingChildProps }) => ReactNode,
 
-  onSubmit: (notes: NoteTakingFormState) => void
+  onSubmit: (
+    notes: Array<{
+      [coupleIdForHumans: string]: { [criterionName: string]: ?number }
+    }>
+  ) => void
 };
 class NoteTakingForm extends React.Component<
   NoteTakingFormProps,
@@ -141,7 +147,8 @@ class NoteTakingForm extends React.Component<
         }),
         {}
       )
-    )
+    ),
+    showConfirmationModal: false
   };
 
   render() {
@@ -172,19 +179,44 @@ class NoteTakingForm extends React.Component<
     );
 
     return (
-      <form
-        onSubmit={event => {
-          event.preventDefault();
-          this.props.onSubmit(this.state);
-        }}
-      >
+      <form>
+        <Modal
+          isOpen={this.state.showConfirmationModal}
+          onRequestClose={() => this.setState({ showConfirmationModal: false })}
+          className="modal"
+        >
+          <h1 className="modal__header">Submit notes</h1>
+          <div className="modal__button-row">
+            <button
+              type="button"
+              className="modal__cancel-button"
+              onClick={() => this.setState({ showConfirmationModal: false })}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="note-taking-submit-button"
+              onClick={() => {
+                this.setState({ showConfirmationModal: false });
+                this.props.onSubmit(this.state.selectedValues);
+              }}
+            >
+              Submit
+            </button>
+          </div>
+        </Modal>
         <div className="note-taking-area">
           {this.props.children({
             childProps
           })}
         </div>
 
-        <button type="submit" className="note-taking-submit-button">
+        <button
+          type="button"
+          className="note-taking-submit-button"
+          onClick={() => this.setState({ showConfirmationModal: true })}
+        >
           Submit
         </button>
       </form>

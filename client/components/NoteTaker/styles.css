@@ -133,3 +133,62 @@
 .note-taking-submit-button:active {
   transform: scale(0.99);
 }
+
+.note-taking-submit-button:hover,
+.note-taking-submit-button:focus {
+  background: #4b8ba7;
+}
+
+.modal {
+  border: #ccc 2px solid;
+  border-radius: 0.5rem;
+  width: 45rem;
+  height: 25rem;
+  background: #fefefe;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+}
+
+.modal__header {
+  margin-top: 5rem;
+  text-align: center;
+  font-size: 3rem;
+}
+
+.modal__button-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+}
+
+.modal__cancel-button {
+  height: 5rem;
+  width: 12rem;
+  margin: 0;
+
+  outline: none;
+
+  border: #ccc 2px solid;
+  border-radius: 0.8rem;
+
+  text-decoration: none;
+  background: #fefefe;
+  color: #222;
+  font-family: sans-serif;
+  font-size: 2rem;
+  cursor: pointer;
+  text-align: center;
+
+  margin-right: 1rem;
+}
+
+.modal__cancel-button:active {
+  transform: scale(0.99);
+}
+
+.modal__cancel-button:hover,
+.modal__cancel-button:focus {
+  background: #cccccc50;
+}
