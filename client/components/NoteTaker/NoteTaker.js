@@ -367,7 +367,7 @@ function NoteTakerColumnItemOption({
         className="note-taking-item-option-value"
         value={value}
         checked={selected}
-        onChange={({ currentTarget }) => {
+        onChange={({ currentTarget }: SyntheticEvent<HTMLInputElement>) => {
           selectValue(parseInt(currentTarget.value, 10));
         }}
       />
