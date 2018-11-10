@@ -12,13 +12,13 @@
     "start": "next start",
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test jest --watch",
-    "format": "prettier --write 'pages/**/*.js' '!(node_modules|.next)/**/*.js'",
-    "lint": "eslint 'pages/**/*.js'",
-    "lint:fix": "eslint --fix 'pages/**/*.js'"
+    "format": "prettier --write 'pages/**/*.js' 'components/**/*.js' '!(node_modules|.next)/**/*.js'",
+    "lint": "eslint 'pages/**/*.js' 'components/**/*.js'",
+    "lint:fix": "eslint --fix 'pages/**/*.js' 'components/**/*.js'"
   },
   "lint-staged": {
     "*.js": [
-      "eslint --fix",
+      "eslint --fix 'pages/**/*.js' 'components/**/*.js'",
       "prettier --write",
       "git add"
     ]
@@ -38,7 +38,8 @@
     "next": "^7.0.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-modal": "^3.6.1"
+    "react-modal": "^3.6.1",
+    "styled-components": "^4.0.3"
   },
   "devDependencies": {
     "autoprefixer": "^9.3.1",
@@ -46,6 +47,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "9.x",
     "babel-jest": "^23.6.0",
+    "babel-plugin-styled-components": "^1.8.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-flow": "^6.23.0",
     "eslint": "5.x",

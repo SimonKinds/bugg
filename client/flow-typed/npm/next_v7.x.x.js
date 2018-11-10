@@ -1,5 +1,5 @@
-// flow-typed signature: 5539e039accbb8a5126ae2164a8861ce
-// flow-typed version: 634833e631/next_v7.x.x/flow_>=v0.53.x
+// flow-typed signature: 5c6405e66f6ce7dd8b1385de7e221be6
+// flow-typed version: 1965a633bb/next_v7.x.x/flow_>=v0.53.x
 
 declare module "next" {
   declare type RequestHandler = (
@@ -105,10 +105,21 @@ declare module "next/router" {
     url: string
   ) => void;
 
-  declare export type EventEmitter = {
-    on: (event: string, cb: RouteCallback | RouteErrorCallback) => EventEmitter,
-    off: (event: string, cb: RouteCallback | RouteErrorCallback) => EventEmitter
-  };
+  declare export interface RouterEvents {
+    on(event: "routeChangeStart", cb: RouteCallback): RouterEvents;
+    on(event: "routeChangeComplete", cb: RouteCallback): RouterEvents;
+    on(event: "routeChangeError", cb: RouteErrorCallback): RouterEvents;
+    on(event: "beforeHistoryChange", cb: RouteCallback): RouterEvents;
+    on(event: "hashChangeStart", cb: RouteCallback): RouterEvents;
+    on(event: "hashChangeComplete", cb: RouteCallback): RouterEvents;
+
+    off(event: "routeChangeStart", cb: RouteCallback): RouterEvents;
+    off(event: "routeChangeComplete", cb: RouteCallback): RouterEvents;
+    off(event: "routeChangeError", cb: RouteErrorCallback): RouterEvents;
+    off(event: "beforeHistoryChange", cb: RouteCallback): RouterEvents;
+    off(event: "hashChangeStart", cb: RouteCallback): RouterEvents;
+    off(event: "hashChangeComplete", cb: RouteCallback): RouterEvents;
+  }
 
   declare export type EventChangeOptions = {
     shallow?: boolean,
@@ -126,7 +137,7 @@ declare module "next/router" {
     +pathname: string,
     +asPath: string,
     +query: Object,
-    events: EventEmitter,
+    events: RouterEvents,
     push(
       url: string,
       as: ?string,
