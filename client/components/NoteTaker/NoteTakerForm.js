@@ -3,6 +3,33 @@ import React, { type Node as ReactNode } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 
+type CriterionViewModel = {
+  criterionName: string,
+  color: "blue" | "red" | "green" | "purple"
+};
+
+type SelectedValues = Array<{
+  [coupleIdForHumans: string]: { [criterionName: string]: ?number }
+}>;
+
+type NoteTakerChildProps = Array<{
+  selectedValues: { [criterionName: string]: ?number },
+  selectValue: (value: number, citerionName: string) => void
+}>;
+type NoteTakerFormState = {
+  selectedValues: SelectedValues,
+  showConfirmationModal: boolean
+};
+type NoteTakerFormProps = {
+  selectedCoupleIdForHumans: string,
+  coupleIdsForHumans: Array<string>,
+  criteriaForNotableEntities: Array<Array<CriterionViewModel>>,
+
+  children: ({ childProps: NoteTakerChildProps }) => ReactNode,
+
+  onSubmit: (notes: SelectedValues) => void
+};
+
 const StyledNoteTakingArea = styled.div`
   display: flex;
   margin-bottom: 2rem;
@@ -92,79 +119,13 @@ const StyledModal = styled(Modal)`
   left: 50%;
   transform: translate(-50%, -50%) !important;
 `;
-
-type CriterionViewModel = {
-  criterionName: string,
-  color: "blue" | "red" | "green" | "purple"
-};
-
-type NoteTakerChildProps = Array<{
-  selectedValues: { [criterionName: string]: ?number },
-  selectValue: (value: number, citerionName: string) => void
-}>;
-type NoteTakerFormState = {
-  selectedValues: Array<{
-    [coupleIdForHumans: string]: { [criterionName: string]: ?number }
-  }>,
-  showConfirmationModal: boolean
-};
-type NoteTakerFormProps = {
-  selectedCoupleIdForHumans: string,
-  coupleIdsForHumans: Array<string>,
-  criteriaForNotableEntities: Array<Array<CriterionViewModel>>,
-
-  children: ({ childProps: NoteTakerChildProps }) => ReactNode,
-
-  onSubmit: (
-    notes: Array<{
-      [coupleIdForHumans: string]: { [criterionName: string]: ?number }
-    }>
-  ) => void
-};
 class NoteTakerForm extends React.Component<
   NoteTakerFormProps,
   NoteTakerFormState
 > {
-  state = {
-    selectedValues: this.props.criteriaForNotableEntities.map(() =>
-      this.props.coupleIdsForHumans.reduce(
-        (selectedValues, coupleIdForHumans) => ({
-          ...selectedValues,
-          [coupleIdForHumans]: {}
-        }),
-        {}
-      )
-    ),
-    showConfirmationModal: false
-  };
+  state = initializeState(this.props);
 
   render() {
-    const { selectedCoupleIdForHumans } = this.props;
-    const { selectedValues } = this.state;
-
-    const childProps: NoteTakerChildProps = this.props.criteriaForNotableEntities.map(
-      (_, i) => ({
-        selectedValues: selectedValues[i][selectedCoupleIdForHumans],
-        selectValue: (value: number, criterionName: string) => {
-          const updatedValues = selectedValues.map((values, j) => {
-            if (i === j) {
-              return {
-                ...values,
-                [selectedCoupleIdForHumans]: {
-                  ...values[selectedCoupleIdForHumans],
-                  [criterionName]: value
-                }
-              };
-            }
-
-            return values;
-          });
-
-          this.setState({ selectedValues: updatedValues });
-        }
-      })
-    );
-
     return (
       <form
         onSubmit={(e: SyntheticEvent<HTMLInputElement>) => {
@@ -197,7 +158,11 @@ class NoteTakerForm extends React.Component<
         </StyledModal>
         <StyledNoteTakingArea>
           {this.props.children({
-            childProps
+            childProps: buildChildProps(
+              this.props,
+              this.state,
+              selectedValues => this.setState({ selectedValues })
+            )
           })}
         </StyledNoteTakingArea>
 
@@ -205,6 +170,66 @@ class NoteTakerForm extends React.Component<
       </form>
     );
   }
+}
+
+function initializeState(props: NoteTakerFormProps): NoteTakerFormState {
+  return {
+    selectedValues: props.criteriaForNotableEntities.map(() =>
+      props.coupleIdsForHumans.reduce(
+        (selectedValues, coupleIdForHumans) => ({
+          ...selectedValues,
+          [coupleIdForHumans]: {}
+        }),
+        {}
+      )
+    ),
+    showConfirmationModal: false
+  };
+}
+
+function buildChildProps(
+  props: NoteTakerFormProps,
+  state: NoteTakerFormState,
+  setState: (updatedValues: SelectedValues) => void
+): NoteTakerChildProps {
+  return props.criteriaForNotableEntities.map((_, notableEntityGroupIndex) => ({
+    selectedValues:
+      state.selectedValues[notableEntityGroupIndex][
+        props.selectedCoupleIdForHumans
+      ],
+    selectValue: (value: number, criterionName: string) =>
+      setState(
+        updateValueForCriterionAtIndex(
+          state.selectedValues,
+          props.selectedCoupleIdForHumans,
+          criterionName,
+          notableEntityGroupIndex,
+          value
+        )
+      )
+  }));
+}
+
+function updateValueForCriterionAtIndex(
+  selectedValues: SelectedValues,
+  selectedCoupleIdForHumans: string,
+  criterionName: string,
+  index: number,
+  value: number
+): SelectedValues {
+  return selectedValues.map((values, i) => {
+    if (index === i) {
+      return {
+        ...values,
+        [selectedCoupleIdForHumans]: {
+          ...values[selectedCoupleIdForHumans],
+          [criterionName]: value
+        }
+      };
+    }
+
+    return values;
+  });
 }
 
 export default NoteTakerForm;
