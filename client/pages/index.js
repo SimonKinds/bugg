@@ -5,19 +5,6 @@ import Head from "next/head";
 import styled from "styled-components";
 import NoteTaker from "../components/NoteTaker";
 
-const leaders = ["11", "22", "33", "44", "55"];
-const followers = ["16", "81", "94", "23", "17"];
-
-const couples = leaders.map((leader, i) => `${leader} - ${followers[i]}`);
-
-const notableEntities = couples.reduce(
-  (notableEntities, couple, i) => ({
-    ...notableEntities,
-    [couple]: [leaders[i], followers[i]]
-  }),
-  {}
-);
-
 const leaderCriteria = [
   { criterionName: "style", color: "blue" },
   { criterionName: "esthethics", color: "red" },
@@ -31,6 +18,28 @@ const followerCriteria = [
   { criterionName: "style", color: "blue" },
   { criterionName: "esthethics", color: "red" }
 ];
+
+const leaders = ["11", "22", "33", "44", "55"];
+const followers = ["16", "81", "94", "23", "17"];
+
+const coupleIdsForHumans = leaders.map(
+  (leader, i) => `${leader} - ${followers[i]}`
+);
+
+const noteableEntitiesWithCriteria = coupleIdsForHumans.map(
+  (coupleId, index) => {
+    return {
+      coupleIdForHumans: coupleId,
+      noteableEntities: [
+        { noteableEntityIdForHumans: leaders[index], criteria: leaderCriteria },
+        {
+          noteableEntityIdForHumans: followers[index],
+          criteria: followerCriteria
+        }
+      ]
+    };
+  }
+);
 
 const tournamentName = "Tournoi de Danse 4Temps De Paris";
 
@@ -117,11 +126,7 @@ function IndexPage() {
           </StyledJudgeInformation>
         </StyledInformationContainer>
         <main>
-          <NoteTaker
-            coupleIdsForHumans={couples}
-            notableEntitiesForHumans={notableEntities}
-            criteriaForNotableEntities={[leaderCriteria, followerCriteria]}
-          />
+          <NoteTaker couples={noteableEntitiesWithCriteria} />
         </main>
       </StyledContainer>
     </>

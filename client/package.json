@@ -29,6 +29,7 @@
     }
   },
   "jest": {
+    "testPathIgnorePatterns": ["/node_modules", "/.next/"],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     }

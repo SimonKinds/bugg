@@ -11,70 +11,72 @@ type CriterionViewModel = {
   color: "blue" | "red" | "green" | "purple"
 };
 
-type NoteTakerContainerProps = {
-  coupleIdsForHumans: Array<string>,
-  notableEntitiesForHumans: {
-    [coupleIdForHuman: string]: Array<string>
-  },
-
-  criteriaForNotableEntities: Array<Array<CriterionViewModel>>
+export type noteableEntityWithCriteria = {
+  noteableEntityIdForHumans: string,
+  criteria: Array<CriterionViewModel>
 };
-type NoteTakerContainerState = {
-  selectedCoupleIdForHumans: string,
-  notableEntitiesForHumans: Array<string>
+
+type NoteTakerProps = {
+  couples: Array<{
+    coupleIdForHumans: string,
+    noteableEntities: Array<noteableEntityWithCriteria>
+  }>
 };
-class NoteTakerContainer extends React.Component<
-  NoteTakerContainerProps,
-  NoteTakerContainerState
-> {
-  state = initializeNoteTakerContainerState(this.props);
-
-  selectCouple = (coupleIdForHumans: string) => {
-    const { notableEntitiesForHumans } = this.props;
-    const newSelectedNotableEntities =
-      notableEntitiesForHumans[coupleIdForHumans];
-
-    if (newSelectedNotableEntities == null) {
-      // eslint-disable-next-line no-console
-      console.error("Selected couple does not exist");
-    } else {
-      this.setState({
-        selectedCoupleIdForHumans: coupleIdForHumans,
-        notableEntitiesForHumans: newSelectedNotableEntities
-      });
-    }
+type NoteTakerState = {
+  selectedCoupleIndex: number
+};
+class NoteTaker extends React.Component<NoteTakerProps, NoteTakerState> {
+  state = {
+    selectedCoupleIndex: 0
   };
 
+  componentDidMount() {
+    if (!isInProduction()) {
+      warnIfInvalidProps(this.props);
+    }
+  }
+
   render() {
-    if (this.state.selectedCoupleIdForHumans == null) {
+    const { couples } = this.props;
+    if (couples.length === 0) {
       // eslint-disable-next-line no-console
       console.error("Expects at least one couple");
       return null;
     }
 
-    const { criteriaForNotableEntities, coupleIdsForHumans } = this.props;
-    const { selectedCoupleIdForHumans, notableEntitiesForHumans } = this.state;
+    const { selectedCoupleIndex } = this.state;
+    const coupleIdsForHumans = couples.map(couple => couple.coupleIdForHumans);
+    const selectedCouple = couples[selectedCoupleIndex];
 
     return (
       <>
         <CouplePicker
-          onClick={this.selectCouple}
+          onClick={coupleIndex =>
+            this.setState({ selectedCoupleIndex: coupleIndex })
+          }
           coupleIdsForHumans={coupleIdsForHumans}
-          selectedCoupleIdForHuman={selectedCoupleIdForHumans}
+          selectedIndex={selectedCoupleIndex}
         />
         <NoteTakerForm
           onSubmit={notes => alert("This is us submitting the notes!")}
-          selectedCoupleIdForHumans={selectedCoupleIdForHumans}
-          coupleIdsForHumans={coupleIdsForHumans}
-          criteriaForNotableEntities={criteriaForNotableEntities}
+          selectedCoupleIndex={selectedCoupleIndex}
+          coupleCount={couples.length}
+          noteableEntitiesPerCoupleCount={couples[0].noteableEntities.length}
         >
           {({ childProps }) =>
-            childProps.map((props, i) => (
+            childProps.map((props, noteableEntityIndex) => (
               <NoteTakerColumn
-                key={notableEntitiesForHumans[i]}
-                participantId={notableEntitiesForHumans[i]}
-                criteriaForNotableEntities={criteriaForNotableEntities}
-                criteria={criteriaForNotableEntities[i]}
+                key={
+                  selectedCouple.noteableEntities[noteableEntityIndex]
+                    .noteableEntityIdForHumans
+                }
+                participantId={
+                  selectedCouple.noteableEntities[noteableEntityIndex]
+                    .noteableEntityIdForHumans
+                }
+                criteria={
+                  selectedCouple.noteableEntities[noteableEntityIndex].criteria
+                }
                 {...props}
               />
             ))
@@ -85,30 +87,26 @@ class NoteTakerContainer extends React.Component<
   }
 }
 
-function initializeNoteTakerContainerState({
-  coupleIdsForHumans,
-  notableEntitiesForHumans,
-  criteriaForNotableEntities
-}: NoteTakerContainerProps): NoteTakerContainerState {
-  const defaultCouple = coupleIdsForHumans[0];
-
-  if (!process.env.NODE_ENV !== "production") {
-    coupleIdsForHumans.forEach(coupleIdForHumans => {
-      const notableEntities = notableEntitiesForHumans[coupleIdForHumans];
-
-      if (notableEntities.length !== criteriaForNotableEntities.length) {
-        // eslint-disable-next-line no-console
-        console.error(
-          "The amount of notable entities must be equal to the amount of criteriaForNotableEntities"
-        );
-      }
-    });
-  }
-
-  return {
-    selectedCoupleIdForHumans: defaultCouple,
-    notableEntitiesForHumans: notableEntitiesForHumans[defaultCouple]
-  };
+function isInProduction() {
+  return process.env.NODE_ENV === "production";
 }
 
-export default NoteTakerContainer;
+function warnIfInvalidProps(props: NoteTakerProps) {
+  props.couples.forEach((couple, index, couples) => {
+    if (index === 0) {
+      return;
+    }
+
+    const noteableEntityCount = couple.noteableEntities.length;
+    const prevNoteableEntityCount = couples[index - 1].noteableEntities.length;
+
+    if (noteableEntityCount !== prevNoteableEntityCount) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Each couple must have an equal amount of noteable entities: ${index} has ${noteableEntityCount} and should be ${prevNoteableEntityCount}`
+      );
+    }
+  });
+}
+
+export default NoteTaker;

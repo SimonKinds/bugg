@@ -11,22 +11,22 @@ const StyledContainer = styled.div`
 
 type CouplePickerProps = {
   coupleIdsForHumans: Array<string>,
-  selectedCoupleIdForHuman: string,
-  onClick: (coupleIdForHumans: string) => void
+  selectedIndex: number,
+  onClick: (index: number) => void
 };
 function CouplePicker({
   coupleIdsForHumans,
-  selectedCoupleIdForHuman,
+  selectedIndex,
   onClick
 }: CouplePickerProps) {
   return (
     <StyledContainer>
-      {coupleIdsForHumans.map(coupleIdForHuman => (
+      {coupleIdsForHumans.map((coupleIdForHuman, i) => (
         <CouplePickerButton
           key={coupleIdForHuman}
           coupleIdForHumans={coupleIdForHuman}
-          onClick={onClick}
-          selected={coupleIdForHuman === selectedCoupleIdForHuman}
+          onClick={() => onClick(i)}
+          selected={i === selectedIndex}
         />
       ))}
     </StyledContainer>
@@ -65,7 +65,7 @@ const StyledButton: ComponentType<{ selected: boolean }> = styled.button`
 type CouplePickerButtonProps = {
   coupleIdForHumans: string,
   selected: boolean,
-  onClick: (coupleIdForHumans: string) => void
+  onClick: () => void
 };
 function CouplePickerButton({
   coupleIdForHumans,
@@ -73,11 +73,7 @@ function CouplePickerButton({
   onClick
 }: CouplePickerButtonProps) {
   return (
-    <StyledButton
-      selected={selected}
-      type="button"
-      onClick={() => onClick(coupleIdForHumans)}
-    >
+    <StyledButton selected={selected} type="button" onClick={onClick}>
       {coupleIdForHumans}
     </StyledButton>
   );

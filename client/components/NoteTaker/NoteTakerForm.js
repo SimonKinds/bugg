@@ -3,14 +3,7 @@ import React, { type Node as ReactNode } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 
-type CriterionViewModel = {
-  criterionName: string,
-  color: "blue" | "red" | "green" | "purple"
-};
-
-type SelectedValues = Array<{
-  [coupleIdForHumans: string]: { [criterionName: string]: ?number }
-}>;
+type SelectedValues = Array<Array<{ [criterionName: string]: ?number }>>;
 
 type NoteTakerChildProps = Array<{
   selectedValues: { [criterionName: string]: ?number },
@@ -21,9 +14,9 @@ type NoteTakerFormState = {
   showConfirmationModal: boolean
 };
 type NoteTakerFormProps = {
-  selectedCoupleIdForHumans: string,
-  coupleIdsForHumans: Array<string>,
-  criteriaForNotableEntities: Array<Array<CriterionViewModel>>,
+  selectedCoupleIndex: number,
+  coupleCount: number,
+  noteableEntitiesPerCoupleCount: number,
 
   children: ({ childProps: NoteTakerChildProps }) => ReactNode,
 
@@ -173,16 +166,19 @@ class NoteTakerForm extends React.Component<
 }
 
 function initializeState(props: NoteTakerFormProps): NoteTakerFormState {
+  const { coupleCount, noteableEntitiesPerCoupleCount } = props;
+  const selectedValues = [];
+  for (let i = 0; i < coupleCount; ++i) {
+    const valuesFornoteableEntities = [];
+    for (let j = 0; j < noteableEntitiesPerCoupleCount; ++j) {
+      valuesFornoteableEntities.push({});
+    }
+
+    selectedValues.push(valuesFornoteableEntities);
+  }
+
   return {
-    selectedValues: props.criteriaForNotableEntities.map(() =>
-      props.coupleIdsForHumans.reduce(
-        (selectedValues, coupleIdForHumans) => ({
-          ...selectedValues,
-          [coupleIdForHumans]: {}
-        }),
-        {}
-      )
-    ),
+    selectedValues,
     showConfirmationModal: false
   };
 }
@@ -192,43 +188,45 @@ function buildChildProps(
   state: NoteTakerFormState,
   setState: (updatedValues: SelectedValues) => void
 ): NoteTakerChildProps {
-  return props.criteriaForNotableEntities.map((_, notableEntityGroupIndex) => ({
-    selectedValues:
-      state.selectedValues[notableEntityGroupIndex][
-        props.selectedCoupleIdForHumans
-      ],
-    selectValue: (value: number, criterionName: string) =>
-      setState(
-        updateValueForCriterionAtIndex(
-          state.selectedValues,
-          props.selectedCoupleIdForHumans,
-          criterionName,
-          notableEntityGroupIndex,
-          value
-        )
-      )
-  }));
+  const { selectedValues } = state;
+
+  return selectedValues[props.selectedCoupleIndex].map(
+    (noteableEntityValues, noteableEntityIndex) => ({
+      selectedValues: noteableEntityValues,
+      selectValue: (value: number, criterionName: string) => {
+        setState(
+          updateValueForCriterionAtIndex(
+            selectedValues,
+            props.selectedCoupleIndex,
+            noteableEntityIndex,
+            criterionName,
+            value
+          )
+        );
+      }
+    })
+  );
 }
 
 function updateValueForCriterionAtIndex(
   selectedValues: SelectedValues,
-  selectedCoupleIdForHumans: string,
+  selectedCoupleIndex: number,
+  selectednoteableEntityIndex: number,
   criterionName: string,
-  index: number,
   value: number
 ): SelectedValues {
-  return selectedValues.map((values, i) => {
-    if (index === i) {
-      return {
-        ...values,
-        [selectedCoupleIdForHumans]: {
-          ...values[selectedCoupleIdForHumans],
-          [criterionName]: value
+  return selectedValues.map((coupleValues, coupleIndex) => {
+    if (coupleIndex === selectedCoupleIndex) {
+      return coupleValues.map((noteableEntityValues, noteableEntityIndex) => {
+        if (noteableEntityIndex === selectednoteableEntityIndex) {
+          return { ...noteableEntityValues, [criterionName]: value };
         }
-      };
+
+        return noteableEntityValues;
+      });
     }
 
-    return values;
+    return coupleValues;
   });
 }
 
