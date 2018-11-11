@@ -6,8 +6,6 @@ import CouplePicker from "./CouplePicker";
 import NoteTakerForm from "./NoteTakerForm";
 import NoteTakerColumn from "./NoteTakerColumn";
 
-import "./styles.css";
-
 type CriterionViewModel = {
   criterionName: string,
   color: "blue" | "red" | "green" | "purple"

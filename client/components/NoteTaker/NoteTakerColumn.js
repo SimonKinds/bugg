@@ -1,11 +1,22 @@
 // @flow
-import React from "react";
+import React, { type ComponentType } from "react";
+import styled from "styled-components";
 
 type CriterionViewModel = {
   criterionName: string,
   color: "blue" | "red" | "green" | "purple"
 };
 
+const StyledColumn = styled.div`
+  width: 50%;
+  margin: 0 1rem;
+`;
+const StyledColumnHeader = styled.h2`
+  font-size: 2.4rem;
+  font-weight: 400;
+  text-align: center;
+  margin: 0 0 1rem 0;
+`;
 type NoteTakerColumnProps = {
   participantId: string,
   criteria: Array<CriterionViewModel>,
@@ -20,8 +31,8 @@ function NoteTakerColumn({
   selectValue
 }: NoteTakerColumnProps) {
   return (
-    <div className="note-taking-column">
-      <h2 className="note-taking-column-header">{participantId}</h2>
+    <StyledColumn>
+      <StyledColumnHeader>{participantId}</StyledColumnHeader>
       {criteria.map(({ criterionName, color }) => (
         <NoteTakerColumnItem
           key={`${participantId}-${criterionName}`}
@@ -33,10 +44,45 @@ function NoteTakerColumn({
           selectValue={(value: number) => selectValue(value, criterionName)}
         />
       ))}
-    </div>
+    </StyledColumn>
   );
 }
 
+const colorMap = {
+  red: "#e5bbb2",
+  blue: "#b2dfe5",
+  green: "#c3e5b2",
+  purple: "#bdb2e5"
+};
+type ColorOptions = "red" | "blue" | "green" | "purple";
+const StyledColumnItem: ComponentType<{
+  color: ColorOptions
+}> = styled.fieldset`
+  border: none;
+  background: #fefefe;
+
+  border-radius: 0.5rem;
+  border-top: 0.2rem solid
+    ${({ color }: { color: ColorOptions }) => colorMap[color]};
+
+  box-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 20%);
+  margin-bottom: 1.5rem;
+`;
+const StyledColumnItemHeader = styled.h3`
+  font-size: 2.2rem;
+  font-variant: small-caps;
+  font-weight: 700;
+  text-align: center;
+
+  margin: 0;
+  padding: 0.5rem 0;
+`;
+const StyledOptionsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  padding: 0.5rem;
+`;
 type NoteTakerColumnItemProps = {
   participantId: string,
   criterionName: string,
@@ -55,11 +101,9 @@ function NoteTakerColumnItem({
   selectValue
 }: NoteTakerColumnItemProps) {
   return (
-    <fieldset
-      className={`note-taking-column-item note-taking-column-item--${color}`}
-    >
-      <h3 className="note-taking-column-item-header">{criterionName}</h3>
-      <div className="note-taking-column-item-options">
+    <StyledColumnItem color={color}>
+      <StyledColumnItemHeader>{criterionName}</StyledColumnItemHeader>
+      <StyledOptionsContainer>
         {values.map(value => (
           <NoteTakerColumnItemOption
             key={`${participantId}-${criterionName}-${value}`}
@@ -70,11 +114,23 @@ function NoteTakerColumnItem({
             selectValue={selectValue}
           />
         ))}
-      </div>
-    </fieldset>
+      </StyledOptionsContainer>
+    </StyledColumnItem>
   );
 }
 
+const StyledOptionLabel = styled.label`
+  font-size: 2.2rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+`;
+const StyledValue = styled.input`
+  margin: 0;
+  margin-right: 1rem;
+`;
 type NoteTakerColumnItemOptionProps = {
   participantId: string,
   criterionName: string,
@@ -90,15 +146,11 @@ function NoteTakerColumnItemOption({
   selectValue
 }: NoteTakerColumnItemOptionProps) {
   return (
-    <label
-      htmlFor={`${participantId}-${criterionName}-${value}`}
-      className="note-taking-item-option"
-    >
-      <input
+    <StyledOptionLabel htmlFor={`${participantId}-${criterionName}-${value}`}>
+      <StyledValue
         name={`${participantId}-${criterionName}`}
         id={`${participantId}-${criterionName}-${value}`}
         type="radio"
-        className="note-taking-item-option-value"
         value={value}
         checked={selected}
         onChange={({ currentTarget }: SyntheticEvent<HTMLInputElement>) => {
@@ -106,7 +158,7 @@ function NoteTakerColumnItemOption({
         }}
       />
       {value}
-    </label>
+    </StyledOptionLabel>
   );
 }
 
