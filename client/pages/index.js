@@ -33,11 +33,14 @@ const followerCriteria = [
   { criterionName: "esthethics", color: "red" }
 ];
 
+const tournamentName = "Tournoi de Danse 4Temps De Paris";
+
 function IndexPage() {
   return (
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Notes - {tournamentName}</title>
       </Head>
       <header className="header">
         <h1 className="site-name">Bugg</h1>
@@ -45,9 +48,7 @@ function IndexPage() {
       <div className="container">
         <div className="note-taking-information">
           <div>
-            <h1 className="tournament-name">
-              Tournoi de Danse 4Temps De Paris
-            </h1>
+            <h1 className="tournament-name">{tournamentName}</h1>
             <div className="round-information">
               <p className="round-name">Round 2</p>
               <p className="group-name">Group 3</p>
