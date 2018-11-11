@@ -95,15 +95,3 @@
 .note-taking-submit-button:focus {
   background: #4b8ba7;
 }
-
-.modal {
-  border: #ccc 2px solid;
-  border-radius: 0.5rem;
-  width: 45rem;
-  height: 25rem;
-  background: #fefefe;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) !important;
-}

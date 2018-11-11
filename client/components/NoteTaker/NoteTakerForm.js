@@ -72,7 +72,7 @@ const StyledCancelButton = styled.button`
 
   outline: none;
 
-  border: #ccc 2px solid;
+  border: #ccc 0.2rem solid;
   border-radius: 0.8rem;
 
   text-decoration: none;
@@ -109,7 +109,7 @@ const StyledModalHeader = styled.h1`
 
 // $FlowFixMe
 const StyledModal = styled(Modal)`
-  border: #ccc 2px solid;
+  border: #ccc 0.2rem solid;
   border-radius: 0.5rem;
   width: 45rem;
   height: 25rem;
