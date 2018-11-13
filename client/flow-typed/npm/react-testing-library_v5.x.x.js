@@ -1,5 +1,5 @@
-// flow-typed signature: 59eda4ec84d59ec5e2a7ba8354c5f45b
-// flow-typed version: ba34c6466e/react-testing-library_v5.x.x/flow_>=v0.67.1
+// flow-typed signature: 187ae8536dde5ccffcfaa74225e94ed0
+// flow-typed version: 8ecdf16799/react-testing-library_v5.x.x/flow_>=v0.67.1
 
 declare module "react-testing-library" {
   declare type TextMatch =
@@ -13,36 +13,38 @@ declare module "react-testing-library" {
     collapseWhitespace?: boolean
   };
 
+  declare type SelectorMatchOptions = { selector?: string } & TextMatchOptions;
+
+  declare type AllByText = (
+    text: TextMatch,
+    options?: TextMatchOptions
+  ) => Array<HTMLElement>;
+
+  declare type QueryByText = (
+    text: TextMatch,
+    options?: TextMatchOptions
+  ) => ?HTMLElement;
+
   declare type GetsAndQueries = {|
     getByTestId: (id: TextMatch, options?: TextMatchOptions) => HTMLElement,
-    getByText: (
-      text: TextMatch,
-      options?: { selector?: string } & TextMatchOptions
-    ) => HTMLElement,
+    getByText: (text: TextMatch, options?: SelectorMatchOptions) => HTMLElement,
     getByPlaceholderText: (
       text: TextMatch,
       options?: TextMatchOptions
     ) => HTMLElement,
     getByLabelText: (
       text: TextMatch,
-      options?: { selector?: string } & TextMatchOptions
+      options?: SelectorMatchOptions
     ) => HTMLElement,
+    getAllByLabelText: AllByText,
     getByAltText: (text: TextMatch, options?: TextMatchOptions) => HTMLElement,
     getAll: (text: TextMatch, options?: TextMatchOptions) => Array<HTMLElement>,
+    getAllByText: AllByText,
     queryByTestId: (id: TextMatch, options?: TextMatchOptions) => ?HTMLElement,
     queryByText: (text: TextMatch, options?: TextMatchOptions) => ?HTMLElement,
-    queryByPlaceholderText: (
-      text: TextMatch,
-      options?: TextMatchOptions
-    ) => ?HTMLElement,
-    queryByLabelText: (
-      text: TextMatch,
-      options?: TextMatchOptions
-    ) => ?HTMLElement,
-    queryByAltText: (
-      text: TextMatch,
-      options?: TextMatchOptions
-    ) => ?HTMLElement,
+    queryByPlaceholderText: QueryByText,
+    queryByLabelText: QueryByText,
+    queryByAltText: QueryByText,
     queryAll: (
       text: TextMatch,
       options?: TextMatchOptions
@@ -85,7 +87,7 @@ declare module "react-testing-library" {
         timeout?: number,
         mutationObserverOptions?: MutationObserverInit
       }
-    ) => Promise<T | void>,
+    ) => Promise<T>,
 
     within: (
       element: HTMLElement,
