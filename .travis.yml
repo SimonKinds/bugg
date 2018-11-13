@@ -1,7 +1,6 @@
 language: node_js
 node_js:
-  # Latest stable node release
-  - "node"
+  - "10"
 
 os: linux
 
