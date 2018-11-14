@@ -21,6 +21,12 @@ try {
   }
 }
 
+const db = firebase.firestore();
+db.settings({
+  timestampsInSnapshots: true
+});
+const documentReference = db.doc("tournaments/l1Ogram4lMTBm7MOpcMJ");
+
 const leaderCriteria = [
   { criterionName: "style", color: "blue" },
   { criterionName: "esthethics", color: "red" },
@@ -56,8 +62,6 @@ const noteableEntitiesWithCriteria = coupleIdsForHumans.map(
     };
   }
 );
-
-const tournamentName = "Tournoi de Danse 4Temps De Paris";
 
 const StyledHeader = styled.header`
   height: 5rem;
@@ -117,36 +121,61 @@ const StyledJudgeType = styled.p`
   margin: 0;
 `;
 
-function IndexPage() {
-  return (
-    <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Notes - {tournamentName}</title>
-      </Head>
-      <StyledHeader>
-        <StyledSiteName>Bugg</StyledSiteName>
-      </StyledHeader>
-      <StyledContainer>
-        <StyledInformationContainer>
-          <div>
-            <StyledTournamentName>{tournamentName}</StyledTournamentName>
-            <StyledRoundInformation>
-              <StyledRoundName>Round 2</StyledRoundName>
-              <StyledGroupName>Group 3</StyledGroupName>
-            </StyledRoundInformation>
-          </div>
-          <StyledJudgeInformation>
-            <StyledJudgeName>Logan</StyledJudgeName>
-            <StyledJudgeType>Judge</StyledJudgeType>
-          </StyledJudgeInformation>
-        </StyledInformationContainer>
-        <main>
-          <NoteTaker couples={noteableEntitiesWithCriteria} />
-        </main>
-      </StyledContainer>
-    </>
-  );
+type IndexPageProps = {
+  tournamentName: string
+};
+
+class IndexPage extends React.Component<IndexPageProps> {
+  static async getInitialProps(): Promise<IndexPageProps> {
+    try {
+      const doc = await documentReference.get();
+      const data = doc.data();
+
+      return { tournamentName: data.name };
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+
+      return { tournamentName: "" };
+    }
+  }
+
+  render() {
+    const { tournamentName } = this.props;
+
+    return (
+      <>
+        <Head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <title>Notes - {tournamentName}</title>
+        </Head>
+        <StyledHeader>
+          <StyledSiteName>Bugg</StyledSiteName>
+        </StyledHeader>
+        <StyledContainer>
+          <StyledInformationContainer>
+            <div>
+              <StyledTournamentName>{tournamentName}</StyledTournamentName>
+              <StyledRoundInformation>
+                <StyledRoundName>Round 2</StyledRoundName>
+                <StyledGroupName>Group 3</StyledGroupName>
+              </StyledRoundInformation>
+            </div>
+            <StyledJudgeInformation>
+              <StyledJudgeName>Logan</StyledJudgeName>
+              <StyledJudgeType>Judge</StyledJudgeType>
+            </StyledJudgeInformation>
+          </StyledInformationContainer>
+          <main>
+            <NoteTaker couples={noteableEntitiesWithCriteria} />
+          </main>
+        </StyledContainer>
+      </>
+    );
+  }
 }
 
 export default IndexPage;

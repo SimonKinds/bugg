@@ -8,5 +8,5 @@ import App from "../index";
 afterEach(cleanup);
 
 it("Can render without crashing", () => {
-  render(<App />);
+  render(<App tournamentName={""} />);
 });
