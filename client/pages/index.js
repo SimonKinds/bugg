@@ -122,26 +122,49 @@ const StyledJudgeType = styled.p`
 `;
 
 type IndexPageProps = {
-  tournamentName: string
+  tournamentName: string,
+  judgeName: string,
+  activeRoundNumber: number,
+  activeGroupNumber: number
 };
 
 class IndexPage extends React.Component<IndexPageProps> {
   static async getInitialProps(): Promise<IndexPageProps> {
     try {
       const doc = await documentReference.get();
-      const data = doc.data();
+      const {
+        name: tournamentName,
+        judgeName,
+        activeRoundNumber,
+        activeGroupNumber
+      } = doc.data();
 
-      return { tournamentName: data.name };
+      return {
+        tournamentName,
+        judgeName,
+        activeRoundNumber,
+        activeGroupNumber
+      };
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
 
-      return { tournamentName: "" };
+      return {
+        tournamentName: "",
+        judgeName: "",
+        activeRoundNumber: 0,
+        activeGroupNumber: 0
+      };
     }
   }
 
   render() {
-    const { tournamentName } = this.props;
+    const {
+      tournamentName,
+      judgeName,
+      activeRoundNumber,
+      activeGroupNumber
+    } = this.props;
 
     return (
       <>
@@ -160,12 +183,12 @@ class IndexPage extends React.Component<IndexPageProps> {
             <div>
               <StyledTournamentName>{tournamentName}</StyledTournamentName>
               <StyledRoundInformation>
-                <StyledRoundName>Round 2</StyledRoundName>
-                <StyledGroupName>Group 3</StyledGroupName>
+                <StyledRoundName>Round {activeRoundNumber}</StyledRoundName>
+                <StyledGroupName>Group {activeGroupNumber}</StyledGroupName>
               </StyledRoundInformation>
             </div>
             <StyledJudgeInformation>
-              <StyledJudgeName>Logan</StyledJudgeName>
+              <StyledJudgeName>{judgeName}</StyledJudgeName>
               <StyledJudgeType>Judge</StyledJudgeType>
             </StyledJudgeInformation>
           </StyledInformationContainer>
