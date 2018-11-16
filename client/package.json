@@ -14,7 +14,8 @@
     "test:watch": "NODE_ENV=test jest --watch",
     "format": "prettier --write 'pages/**/*.js' 'components/**/*.js' '!(node_modules|.next)/**/*.js'",
     "lint": "eslint 'pages/**/*.js' 'components/**/*.js'",
-    "lint:fix": "eslint --fix 'pages/**/*.js' 'components/**/*.js'"
+    "lint:fix": "eslint --fix 'pages/**/*.js' 'components/**/*.js'",
+    "flow:check": "flow check"
   },
   "lint-staged": {
     "*.js": [
@@ -25,7 +26,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test && lint-staged"
+      "pre-commit": "npm run test && npm run flow:check && lint-staged"
     }
   },
   "jest": {
