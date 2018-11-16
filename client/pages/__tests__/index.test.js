@@ -8,5 +8,12 @@ import App from "../index";
 afterEach(cleanup);
 
 it("Can render without crashing", () => {
-  render(<App tournamentName={""} />);
+  render(
+    <App
+      tournamentName={""}
+      judgeName={"test judge"}
+      activeRoundNumber={2}
+      activeGroupNumber={3}
+    />
+  );
 });

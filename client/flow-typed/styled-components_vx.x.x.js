@@ -391,7 +391,7 @@ declare module "styled-components" {
     ComponentListKeys
   >;
   declare module.exports: {
-    $call: $npm$styledComponents$Call<ComponentListKeys>,
+    [[call]]: $npm$styledComponents$Call<ComponentListKeys>,
     injectGlobal: TaggedTemplateLiteral<void>,
     css: TaggedTemplateLiteral<Array<Interpolation>>,
     keyframes: TaggedTemplateLiteral<string>,
@@ -508,7 +508,7 @@ declare module "styled-components/native" {
     NativeComponentListKeys
   >;
   declare module.exports: {
-    $call: $npm$styledComponents$Call<NativeComponentListKeys>,
+    [[call]]: $npm$styledComponents$Call<NativeComponentListKeys>,
     css: TaggedTemplateLiteral<Array<Interpolation>>,
     keyframes: TaggedTemplateLiteral<string>,
     withTheme: $npm$styledComponents$WithTheme,
