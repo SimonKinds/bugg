@@ -132,19 +132,8 @@ class IndexPage extends React.Component<IndexPageProps> {
   static async getInitialProps(): Promise<IndexPageProps> {
     try {
       const doc = await documentReference.get();
-      const {
-        name: tournamentName,
-        judgeName,
-        activeRoundNumber,
-        activeGroupNumber
-      } = doc.data();
 
-      return {
-        tournamentName,
-        judgeName,
-        activeRoundNumber,
-        activeGroupNumber
-      };
+      return indexPagePropsFromFirebaseData(doc.data());
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -199,6 +188,35 @@ class IndexPage extends React.Component<IndexPageProps> {
       </>
     );
   }
+}
+
+function indexPagePropsFromFirebaseData(data: mixed): IndexPageProps {
+  if (
+    data != null &&
+    typeof data === "object" &&
+    typeof data.name === "string" &&
+    data.name != null &&
+    typeof data.judgeName === "string" &&
+    data.judgeName != null &&
+    typeof data.activeRoundNumber === "number" &&
+    data.activeRoundNumber != null &&
+    typeof data.activeGroupNumber === "number" &&
+    data.activeGroupNumber != null
+  ) {
+    return {
+      tournamentName: data.name,
+      judgeName: data.judgeName,
+      activeRoundNumber: data.activeRoundNumber,
+      activeGroupNumber: data.activeGroupNumber
+    };
+  }
+
+  return {
+    tournamentName: "",
+    judgeName: "",
+    activeRoundNumber: 0,
+    activeGroupNumber: 0
+  };
 }
 
 export default IndexPage;
