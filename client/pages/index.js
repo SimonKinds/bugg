@@ -138,12 +138,7 @@ class IndexPage extends React.Component<IndexPageProps> {
       // eslint-disable-next-line no-console
       console.error(err);
 
-      return {
-        tournamentName: "",
-        judgeName: "",
-        activeRoundNumber: 0,
-        activeGroupNumber: 0
-      };
+      return indexPagePropsFromFirebaseData({});
     }
   }
 
