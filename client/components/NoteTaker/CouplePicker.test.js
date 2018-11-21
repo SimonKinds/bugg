@@ -18,13 +18,13 @@ it("Can render without crashing", () => {
 });
 
 it("onClick is called when clicking on couple", done => {
+  const onClick = done;
+
   const { getByText } = render(
     <CouplePicker
       coupleIdsForHumans={["couple-id"]}
       selectedIndex={0}
-      onClick={() => {
-        done();
-      }}
+      onClick={onClick}
     />
   );
 
