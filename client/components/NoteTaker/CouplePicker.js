@@ -20,7 +20,7 @@ function CouplePicker({
   onClick
 }: CouplePickerProps) {
   return (
-    <StyledContainer>
+    <StyledContainer aria-label="couple picker">
       {coupleIdsForHumans.map((coupleIdForHuman, i) => (
         <CouplePickerButton
           key={coupleIdForHuman}
@@ -73,7 +73,12 @@ function CouplePickerButton({
   onClick
 }: CouplePickerButtonProps) {
   return (
-    <StyledButton selected={selected} type="button" onClick={onClick}>
+    <StyledButton
+      aria-selected={selected}
+      selected={selected}
+      type="button"
+      onClick={onClick}
+    >
       {coupleIdForHumans}
     </StyledButton>
   );
