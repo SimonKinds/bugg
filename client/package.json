@@ -30,6 +30,7 @@
     }
   },
   "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/config/test-setup.js",
     "testPathIgnorePatterns": [
       "/node_modules",
       "/.next/"
