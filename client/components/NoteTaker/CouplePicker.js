@@ -45,6 +45,7 @@ const StyledButton: ComponentType<{ selected: boolean }> = styled.button`
     ${({ selected }: { selected: boolean }) =>
       selected === true ? "#2d29e2" : "#c4c4c4"};
   border-radius: 0.8rem;
+  box-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 20%);
 
   text-decoration: none;
   background: #fafafa;

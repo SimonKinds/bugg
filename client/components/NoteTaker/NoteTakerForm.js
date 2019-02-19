@@ -40,6 +40,7 @@ const StyledSubmitButton = styled.button`
 
   border: none;
   border-radius: 0.8rem;
+  box-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 20%);
 
   text-decoration: none;
   background: #569ab8;
@@ -68,6 +69,7 @@ const StyledCancelButton = styled.button`
 
   border: #ccc 0.2rem solid;
   border-radius: 0.8rem;
+  box-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 20%);
 
   text-decoration: none;
   background: #fefefe;
@@ -112,6 +114,7 @@ const StyledModal = styled(Modal)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) !important;
+  box-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 20%);
 `;
 class NoteTakerForm extends React.Component<
   NoteTakerFormProps,
