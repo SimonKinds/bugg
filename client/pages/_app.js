@@ -6,11 +6,7 @@ import { createGlobalStyle } from "styled-components";
 Modal.setAppElement("#__next");
 
 const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: Montserrat;
-    src: url('https://fonts.googleapis.com/css?family=Montserrat');
-  }
-
+  @import url('https://fonts.googleapis.com/css?family=Montserrat');
   html {
     font-size: 62.5%;
     font-family: Montserrat, sans-serif;
