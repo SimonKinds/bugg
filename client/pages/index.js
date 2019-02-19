@@ -22,9 +22,6 @@ try {
 }
 
 const db = firebase.firestore();
-db.settings({
-  timestampsInSnapshots: true
-});
 const documentReference = db.doc("tournaments/l1Ogram4lMTBm7MOpcMJ");
 
 const leaderCriteria = [
