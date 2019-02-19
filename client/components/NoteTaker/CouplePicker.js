@@ -49,7 +49,6 @@ const StyledButton: ComponentType<{ selected: boolean }> = styled.button`
 
   text-decoration: none;
   background: #fafafa;
-  font-family: sans-serif;
   font-size: 2rem;
   cursor: pointer;
   text-align: center;

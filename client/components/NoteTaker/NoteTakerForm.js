@@ -45,7 +45,6 @@ const StyledSubmitButton = styled.button`
   text-decoration: none;
   background: #569ab8;
   color: #fefefe;
-  font-family: sans-serif;
   font-size: 2rem;
   cursor: pointer;
   text-align: center;
@@ -74,7 +73,6 @@ const StyledCancelButton = styled.button`
   text-decoration: none;
   background: #fefefe;
   color: #222;
-  font-family: sans-serif;
   font-size: 2rem;
   cursor: pointer;
   text-align: center;
